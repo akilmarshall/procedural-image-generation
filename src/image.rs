@@ -124,14 +124,14 @@ impl Image {
         if x < (self.cols - 1) as usize {
             out.push((0, x + 1, y));
         }
-        if y < (self.rows - 1) as usize {
-            out.push((1, x, y + 1));
-        }
         if y > 1 {
-            out.push((2, x, y - 1));
+            out.push((1, x, y - 1));
         }
         if x > 1 {
-            out.push((3, x - 1, y));
+            out.push((2, x - 1, y));
+        }
+        if y < (self.rows - 1) as usize {
+            out.push((3, x, y + 1));
         }
         out
     }
