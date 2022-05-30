@@ -1,7 +1,7 @@
 # tiled-image-tool
 
 This is the tiled-image-tool (tit) for computing statistics from tiled images
-and using it to generate related images.
+and using it for procedural image generation.
 
 ## Tiled Image Data
 

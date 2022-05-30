@@ -1,9 +1,10 @@
 import json
 from itertools import product
-# from PIL import Image
+from PIL import Image
 
-class TID:
+class TIS:
     def __init__(self, path='TIS'):
+        self.path = path
         with open('TIS/TIS.json', 'r') as f:
             tid = json.load(f)
             self.n = tid['n']
@@ -18,6 +19,10 @@ class TID:
             for n in data:
                 neighbors.append(n['data'])
             self.mapping.append(neighbors)
+        self.tiles = []
+        for i in range(self.n):
+            self.tiles.append(Image.open(f'{self.path}/tiles/{i}.png'))
+
 
     def _nid(self, t, n):
         assert 0 <= t < self.n
@@ -40,6 +45,9 @@ class Fragment:
     n is constrained by (d0,a3)
 
     f is fixed, {a, b, c, d} can be selected directly from f's mapping.
+    - compute all possible fragments for each fixed center
+    - how many are there?
+    - convert fragment to Image
     '''
     def __init__(self, tid):
         self.tid = tid
@@ -81,8 +89,21 @@ class Fragment:
 
         yield None
 
+    def to_image(self, fragment):
+        height = len(fragment)
+        width = len(fragment[0])
+        img = Image.new('RGBA', (width * self.tid.width, height * self.tid.height), color=0)
+        for x in range(width):
+            for y in range(height):
+                h = x * self.tid.width
+                k = y * self.tid.height
+                t = fragment[x][y]
+                img.paste(self.tid.tiles[t], box=(h, k))
 
-tid = TID()
+        return img
+
+
+tid = TIS()
 frag = Fragment(tid)
-for i in range(tid.n):
-    print(frag.n_fragmaent(i))
+# for i in range(tid.n):
+#     print(frag.n_fragmaent(i))
