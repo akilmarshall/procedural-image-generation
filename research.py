@@ -92,10 +92,18 @@ class Fragment:
             return A.intersection(B)
         for a, b, c, d in product(A, B, C, D):
             H = intersect(a,1,b,0)
-            K = intersect(b,0,c,1)
+            K = intersect(b,2,c,1)
             M = intersect(c,3,d,2)
             N = intersect(d,0,a,3)
             for h, k, m, n in product(H, K, M, N):
+                # h top right
+                # k top left
+                # n bottom right
+                # m bottom left
+                # a right
+                # b top
+                # c left
+                # d bottom
                 img = [
                         [k, c, m],
                         [b, i, d],
@@ -191,5 +199,6 @@ class Fragment:
 
 tid = TIS()
 frag = Fragment(tid)
-# frag.dump_all_cores()
+#frag.dump_all_cores()
 frag.dump_all_fragment()
+frag.dump_all_neighbor()
