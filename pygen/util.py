@@ -47,6 +47,20 @@ class TIS:
                 ids.append(i)
         return ids
 
+    def intersect(self, u, x, v, y):
+        '''
+        Compute the intersection of u_x and v_y.
+        tile ids: {u, v}
+        neigbor set {x, y}
+        '''
+        assert 0 <= u < self.n
+        assert 0 <= v < self.n
+        assert x in [0, 1, 2, 3]
+        assert y in [0, 1, 2, 3]
+        A = set(self.nids(u, x))
+        B = set(self.nids(v, y))
+        return A.intersection(B)
+
     def neighbors(self, i) -> list[list[int]]:
         '''
         For a tile i, return a list of its neighbor lists (set)

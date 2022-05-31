@@ -1,7 +1,10 @@
 from pygen.util import TIS
-from pygen.fragment import FragmentCenter
+from pygen.fragment import FragmentCorner, FragmentCenter
 
 tis = TIS()
+center = FragmentCenter(tis)
+corner = FragmentCorner(tis)
+
 tis.dump_all_neighbor()
-frag = FragmentCenter(tis)
-frag.dump_all_fragment()
+center.dump_all_fragment()
+corner.dump_all_fragment()
