@@ -6,20 +6,8 @@ from shutil import rmtree
 from tqdm import tqdm
 
 
-class FragmentCenter:
+class Fragment:
     '''
-    3x3 Fragments with fixed centers:
-
-    kbh
-    cfa
-    mdn
-
-    h is constrained by (a1,b0)
-    k is constrained by (b0,c1)
-    m is constrained by (c3,d2)
-    n is constrained by (d0,a3)
-
-    f is fixed, {a, b, c, d} can be selected directly from f's mapping.
     '''
     def __init__(self, tid):
         self.tid = tid
@@ -38,10 +26,41 @@ class FragmentCenter:
         c = len(C)
         d = len(D)
         print(a,b,c,d,a*b*c*d)
-    
-    def fragment(self, i):
+
+    def _core(self, i):
         '''
-        generator for the fragments seeded with i
+        generator for the cores seeded with i, i.e. only the primary infered tiles are generated
+        _ 1 _
+        2 i 0
+        _ 3 _
+        '''
+        assert 0 <= i < self.tid.n
+        A = self.tid.nids(i, 0)
+        B = self.tid.nids(i, 1)
+        C = self.tid.nids(i, 2)
+        D = self.tid.nids(i, 3)
+        for a, b, c, d in product(A, B, C, D):
+                img = [
+                        [None, c, None],
+                        [b, i, d],
+                        [None, a, None],
+                        ]
+                yield img
+    
+    def center_fragment(self, i):
+        '''
+        3x3 Fragments with fixed centers:
+
+        kbh
+        cfa
+        mdn
+
+        h is constrained by (a1,b0)
+        k is constrained by (b0,c1)
+        m is constrained by (c3,d2)
+        n is constrained by (d0,a3)
+
+        f is fixed, {a, b, c, d} can be selected directly from f's mapping.
         '''
         assert 0 <= i < self.tid.n
         A = self.tid.nids(i, 0)
@@ -74,77 +93,26 @@ class FragmentCenter:
                       ]
                 
 
-
-    def dump_all_fragment(self):
-        print('Center Fragments')
-        path = 'fragments (center)'
-        if exists(path):
-            rmtree(path)
-        mkdir(path)
-        for i in tqdm(range(self.tid.n)):
-            local =f'{path}/{i}' 
-            mkdir(local)
-            for n, frag in enumerate(self.fragment(i)):
-                self.tid.to_image(frag).save(f'{local}/{n}.png')
-
-    def core(self, i):
+    def corner_fragment(self, a):
         '''
-        generator for the cores seeded with i, i.e. only the primary infered tiles are generated
-        _ 1 _
-        2 i 0
-        _ 3 _
-        '''
-        assert 0 <= i < self.tid.n
-        A = self.tid.nids(i, 0)
-        B = self.tid.nids(i, 1)
-        C = self.tid.nids(i, 2)
-        D = self.tid.nids(i, 3)
-        for a, b, c, d in product(A, B, C, D):
-                img = [
-                        [None, c, None],
-                        [b, i, d],
-                        [None, a, None],
-                        ]
-                yield img
+        3x3 Fragments with fixed corners:
 
-    def dump_all_cores(self):
-        path = 'cores'
-        if exists(path):
-            rmtree(path)
-        mkdir(path)
-        for i in tqdm(range(self.tid.n)):
-            local =f'{path}/{i}' 
-            mkdir(local)
-            for n, core in enumerate(self.core(i)):
-                self.tid.to_image(core).save(f'{local}/{n}.png')
-class FragmentCorner:
-    '''
-    3x3 Fragments with fixed corners:
+        abc
+        def
+        ghi
 
-    abc
-    def
-    ghi
+        a is fixed
 
-    a is fixed
+        b = a0
+        d = a3
 
-    b = a0
-    d = a3
+        e = d intersection b
+        f = e0
+        h = e3
 
-    e = d intersection b
-    f = e0
-    h = e3
-
-    i = h intersection f
-    g = d intersection h
-    c = b intersection f
-    '''
-    def __init__(self, tid):
-        self.tid = tid
-
-    
-    def fragment(self, a):
-        '''
-        generator for the fragments seeded with a
+        i = h intersection f
+        g = d intersection h
+        c = b intersection f
         '''
         assert 0 <= a < self.tid.n
         B = self.tid.nids(a, 0)
@@ -165,15 +133,22 @@ class FragmentCorner:
                                 [c, f, i],
                               ]
 
-
-    def dump_all_fragment(self):
-        print('Corner Fragments')
-        path = 'fragments (corner)'
-        if exists(path):
-            rmtree(path)
-        mkdir(path)
+    def _dump_all(self, f, name):
+        print(name)
+        if exists(name):
+            rmtree(name)
+        mkdir(name)
         for i in tqdm(range(self.tid.n)):
-            local =f'{path}/{i}' 
+            local =f'{name}/{i}' 
             mkdir(local)
-            for n, frag in enumerate(self.fragment(i)):
+            for n, frag in enumerate(f(i)):
                 self.tid.to_image(frag).save(f'{local}/{n}.png')
+
+    def dump_all_center_fragment(self):
+        self._dump_all(self.center_fragment, 'Center Fragments')
+
+    def dump_all_corner_fragment(self):
+        self._dump_all(self.corner_fragment, 'Corner Fragments')
+
+    def dump_all_cores(self):
+        self._dump_all(self._core, 'Center Core')
