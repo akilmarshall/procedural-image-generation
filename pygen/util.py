@@ -32,7 +32,7 @@ class TIS:
         for i in range(self.n):
             self.tiles.append(Image.open(f'{self.path}/tiles/{i}.png'))
 
-    def nids(self, t, n) -> list[int]:
+    def nids(self, t, n): 
         '''
         for tile t and neigbor n, return a list (set) of neighbor ids
           1
@@ -61,7 +61,7 @@ class TIS:
         B = set(self.nids(v, y))
         return A.intersection(B)
 
-    def neighbors(self, i) -> list[list[int]]:
+    def neighbors(self, i):
         '''
         For a tile i, return a list of its neighbor lists (set)
         [i0, i1, i2, i3] where in is a list (set)
@@ -76,6 +76,7 @@ class TIS:
         '''
         Debug method, dump all tiles and their images in a directory './neigbors/'
         '''
+        print('Neighbors')
         path = 'neighbors'
         if exists(path):
             rmtree(path)
@@ -90,7 +91,7 @@ class TIS:
                 for nid in nids:
                     self.tiles[nid].save(f'{final}/{nid}.png')
 
-    def to_image(self, fragment) -> Image.Image:
+    def to_image(self, fragment): 
         '''
         convert a id matrix to Image
         '''
