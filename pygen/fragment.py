@@ -47,6 +47,13 @@ class Fragment:
                         ]
                 yield img
     
+    def _yield(self, a, b, c, d, e, f, g, h, i):
+        return [
+                [a, d, g],
+                [b, e, h],
+                [c, f, i],
+               ]
+
     def center_fragment(self, i):
         '''
         3x3 Fragments with fixed centers:
@@ -127,12 +134,41 @@ class Fragment:
                     G = self.tid.intersect(d, 3, h, 2)
                     C = self.tid.intersect(b, 0, f, 1)
                     for i, g, c in product(I, G, C):
-                        yield [
-                                [a, d, g],
-                                [b, e, h],
-                                [c, f, i],
-                              ]
+                        yield self._yield(a, b, c, d, e, f, g, h, i)
 
+    def side_fragment(self, b):
+        '''
+        3x3 Fragments with fixed sides:
+
+        abc
+        def
+        ghi
+
+        b is fixed
+
+        C = b0
+        A = b2
+        E = b3
+
+        D = a3 intersect e2
+        F = e0 intersect c3
+        H = e3
+
+        G = d3 intersect h2
+        I = h0 intersect f3
+        '''
+        C = self.tid.nids(b, 0)
+        A = self.tid.nids(b, 2)
+        E = self.tid.nids(b, 3)
+        for a, c, e in product(A, C, E):
+            D = self.tid.intersect(a, 3, e, 2)
+            F = self.tid.intersect(e, 0, c, 3)
+            H = self.tid.nids(e, 3)
+            for d, f, h in product(D, F, H):
+                G = self.tid.intersect(d, 3, h, 2)
+                I = self.tid.intersect(h, 0, f, 3)
+                for g, i in product(G, I):
+                        yield self._yield(a, b, c, d, e, f, g, h, i)
     def _dump_all(self, f, name):
         print(name)
         if exists(name):
@@ -150,5 +186,9 @@ class Fragment:
     def dump_all_corner_fragment(self):
         self._dump_all(self.corner_fragment, 'Corner Fragments')
 
-    def dump_all_cores(self):
+    def dump_all_side_fragment(self):
+        self._dump_all(self.side_fragment, 'Side Fragments')
+
+    def dump_all_center_core(self):
         self._dump_all(self._core, 'Center Core')
+
