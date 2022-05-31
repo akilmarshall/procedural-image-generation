@@ -25,29 +25,36 @@ A module to facilitate quick experimenting of image generation strategies.
 
 A fragment is a 3x3 tiled image with a single fixed tile.
 
+```
 A B C
 D E F
 G H I
+```
 
 Center Fragment:
 
 The center tile is fixed, {F, B, D, H} can be directly inferred from E via TIS.
 
+```
   b
 d E f
   h
+```
   
 The above is known as the set of core images of E where {f, b, d, h} vary over {F, B, D, H}.
 For any core its corners are varied over the set intersections of it's neighbors.
 
+```
 A = B \intersection D
 C = B \intersection F
 G = D \intersection I
 I = H \intersection F
+```
 
 ### Questions
 
-- Are all fragment generation strategies made equal? Does it matter if I fix the center or a corner?
+- Are all fragment generation strategies made equal? Does it matter if I fix the center or a corner?:
+    - counter example says NO.
 
 ## Todo
 
