@@ -22,10 +22,6 @@ $$
     \mathbb{T} = \\{t_0, t_1, \cdots{}, t_n\\}
 $$
 
-$$
-     \left\mathbb{T}\right = n,
-$$
-
 each tile sheet $\mathbb{T}$ contains $n$ items each denoted $t_i$ where $0\leq i \lt n$.
 
 Each image $\mathbb{I}$ also has the associated **neighbor** function,
