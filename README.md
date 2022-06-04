@@ -18,10 +18,10 @@ $\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet*
 
 $\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
 $$
-\begin{align}
+\begin{xalign}
     \mathbb{T} &= \\{t_0, t_1, \cdots{}, t_n\\}\\
      \left\mathbb{T}\right &= n,
-\end{align}
+\end{xalign}
 $$
 each tile sheet $\mathbb{T}$ contains $n$ items each denoted $t_i$ where $0\leq i \lt n$.
 
