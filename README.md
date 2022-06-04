@@ -1,15 +1,38 @@
-# tiled-image-tool
+# Pocedural Image Generation
 
-This is the tiled-image-tool (tit) for computing statistics from tiled images
-and using it for procedural image generation.
+How can I turn a single image into more images that are somewhat like it?
 
-## Tiled Image Data
+## tiled-image-tool
 
-## Tiled Image Statistics
+A binary (tit) for computing statistics from tiled images and procedurally generating new images.
+
+## Theory
+
+$\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet** (a set of rectangular images).
+
+
+tilesheet --> tiled image
+
+
+$\mathbb{T}$ decnotes the tilesheet of $\mathbb{I}$,
+
+$$
+    \mathbb{T} = \{t_0, t_1, \cdotss{}, t_n\}.
+$$
+
+Each image $\mathbb{I}$ also has the associated **neighbor** function,
+
+$$
+    \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
+$$
+
+it takes a tile and a direction and returns a list of the tiles seen adjacent the tile in that direction (in $\mathbb{I}$).
+
+[neighbor direction diagram]
 
 ## Data Pipeline
 
-(dots diagram coming soon)
+(diagrams coming soon)
 
 tiled_image.png -> TIS(TID) [memory/disk]
 
