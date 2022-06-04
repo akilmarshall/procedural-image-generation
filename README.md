@@ -24,15 +24,17 @@ $$
 
 each tile sheet $\mathbb{T}$ contains $n$ items each denoted $t_i$ where $0\leq i \lt n$.
 
-Each image $\mathbb{I}$ also has the associated **neighbor** function,
+Each image $\mathbb{I}$ also has an associated **neighbor** function,
 
 $$
     \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
 $$
 
-that takes a tile and a direction and returns a list of the tiles seen adjacent in the specified direction (in $\mathbb{I}$).
+that takes a tile and a direction and returns a list of the tiles seen adjacent in the specified direction.
 
 [diagram: neighbor direction]
+
+Together $(\mathbb{I}, \mathbb{T}, \mathbb{N})$ can be called **tiled image stastics**.
 
 ## Data Pipeline
 
