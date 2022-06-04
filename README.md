@@ -34,7 +34,7 @@ that takes a tile and a direction and returns a list of the tiles seen adjacent 
 
 [diagram: neighbor direction]
 
-Together $(\mathbb{I}, \mathbb{T}, \mathbb{N})$ can be called **tiled image stastics**.
+Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called **tiled image stastics**.
 
 ## Data Pipeline
 
