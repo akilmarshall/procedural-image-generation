@@ -11,14 +11,16 @@ A binary (tit) for computing statistics from tiled images and procedurally gener
 $\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet** (a set of rectangular images).
 
 
-tilesheet --> tiled image
+[diagram: tilesheet --> tiled image]
 
 
-$\mathbb{T}$ decnotes the tilesheet of $\mathbb{I}$,
+$\mathbb{T}$ denotes the tilesheet of $\mathbb{I}$,
 
 $$
-    \mathbb{T} = \{t_0, t_1, \cdotss{}, t_n\}.
+    \mathbb{T} &= \\{t_0, t_1, \cdotss{}, t_n\\}\\
+     \left\mathbb{T}\right &= n,
 $$
+each tilesheet $\mathbb{T}$ contains $n$ items each denoted $t_i$ where $0\leq i \lt n$.
 
 Each image $\mathbb{I}$ also has the associated **neighbor** function,
 
@@ -26,9 +28,9 @@ $$
     \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
 $$
 
-it takes a tile and a direction and returns a list of the tiles seen adjacent the tile in that direction (in $\mathbb{I}$).
+that takes a tile and a direction and returns a list of the tiles seen adjacent in the specified direction (in $\mathbb{I}$).
 
-[neighbor direction diagram]
+[diagram: neighbor direction]
 
 ## Data Pipeline
 
