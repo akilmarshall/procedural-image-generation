@@ -9,7 +9,7 @@ also known as a **tile set**
 (a set of rectangular images).
 
 
-![Images are composed of tile sheets](https://imgur.com/1YtXTpy)
+![Images are composed of tile sheets](https://imgur.com/1YtXTpy.png)
 
 
 $\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
