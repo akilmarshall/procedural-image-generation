@@ -7,7 +7,7 @@ How can I turn a single image into more images that are somewhat like it?
 $\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet**
 also known as a **tile set**.
 
-![An image composed of a tile set](https://imgur.com/kyV0x5N.png)
+![A tile sheet generates an image](https://imgur.com/suCdR2N.png)
 
 $\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
 
