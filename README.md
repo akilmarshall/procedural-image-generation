@@ -25,6 +25,8 @@ $$
     \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
 $$
 
+![Example of the neighbor function](https://imgur.com/8reI0hs.png)
+
 that takes a tile and a direction and returns a list of the tiles seen adjacent
 in the specified direction $\\{0, 1, 2, 3\\}$.
 
@@ -32,6 +34,10 @@ in the specified direction $\\{0, 1, 2, 3\\}$.
 
 Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called
 **tiled image statistics**.
+
+## Procedures
+
+### Fragment
 
 ## tiled-image-tool
 
