@@ -28,7 +28,7 @@ $$
 $$
 
 that takes a tile and a direction and returns a list of the tiles seen adjacent
-in the specified direction.
+in the specified direction $\\{0, 1, 2, 3\\}$.
 
 ![Neigbor directions](https://imgur.com/9MSJKR7.png)
 
