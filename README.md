@@ -30,7 +30,7 @@ $$
 that takes a tile and a direction and returns a list of the tiles seen adjacent
 in the specified direction.
 
-[diagram: neighbor direction]
+![Neigbor directions](https://imgur.com/9MSJKR7.png)
 
 Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called
 **tiled image statistics**.
