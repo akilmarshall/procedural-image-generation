@@ -1,21 +1,56 @@
-# tiled-image-tool
+# Procedural Image Generation
 
-This is the tiled-image-tool (tit) for computing statistics from tiled images
-and using it for procedural image generation.
+How can I turn a single image into more images that are somewhat like it?
 
-## Tiled Image Data
+## Theory
 
-## Tiled Image Statistics
+$\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet**
+also known as a **tile set**
+(a set of rectangular images).
 
-## Data Pipeline
 
-(dots diagram coming soon)
+![Images are composed of tile sheets](https://imgur.com/1YtXTpy.png)
+
+
+$\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
+
+$$
+    \mathbb{T} = \\{t_0, t_1, \cdots{}, t_n\\}
+$$
+
+each tile set $\mathbb{T}$ contains $n$ items each denoted $t_i$ where
+$0\leq i \lt n$.
+
+Each image $\mathbb{I}$ also has an associated **neighbor** function,
+
+$$
+    \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
+$$
+
+that takes a tile and a direction and returns a list of the tiles seen adjacent
+in the specified direction $\\{0, 1, 2, 3\\}$.
+
+![Neigbor directions](https://imgur.com/9MSJKR7.png)
+
+Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called
+**tiled image statistics**.
+
+## tiled-image-tool
+
+A command line tool written in rust for computing statistics from tiled images
+and procedurally generating new images.
+
+### Data Pipeline
+
+(diagrams coming soon)
 
 tiled_image.png -> TIS(TID) [memory/disk]
 
 TIS(TID) -> Algorithm -> new_image.png
 
+<!---
 ## Image Generation
+## Python Modules
 
 ### pygen
 
@@ -60,3 +95,4 @@ I = H \intersection F
 
 - pursue image generation via fragment database. TIS -> DB -> Image GEN
     - can this be done without the database? TIS -> Image GEN 
+--->
