@@ -3,7 +3,7 @@ from os import mkdir
 from os.path import exists
 from shutil import rmtree
 
-from PIL import Image
+from PIL import Image, ImageDraw
 from tqdm import tqdm
 
 
@@ -72,9 +72,9 @@ class TIS:
             out.append(self.nids(i, n))
         return out
 
-    def dump_all_neighbor(self):
+    def dump_all_neighbor_split(self):
         '''
-        Debug method, dump all tiles and their images in a directory './neigbors/'
+        Debug method, dump all tiles and their images in a directory split into sub directories './neigbors/'
         '''
         print('Neighbors')
         path = 'neighbors'
@@ -90,6 +90,55 @@ class TIS:
                 mkdir(final)
                 for nid in nids:
                     self.tiles[nid].save(f'{final}/{nid}.png')
+
+    def dump_all_neighbor(self):
+        '''
+        Debug method, dump all tiles and their images in a directory './neigbors/'
+        '''
+        print('Neighbors')
+        path = 'neighbors'
+        if exists(path):
+            rmtree(path)
+        mkdir(path)
+        for i in tqdm(range(self.n)):
+            neighbors = [None] * 4
+            for n, nids in enumerate(self.neighbors(i)):
+                neighbors[n] = nids
+            gap_w = self.width // 8
+            gap_h = self.height // 8 
+            margin = 2 * max(self.width, self.height)
+            w = 1 + len(neighbors[0]) + len(neighbors[2])
+            h = 1 + len(neighbors[1]) + len(neighbors[3])
+
+            width = (w * self.width) + (2 * margin) + (w * gap_w)
+            height = (h * self.height) + (2 * margin) + ((h - 1) * gap_h)
+            img = Image.new('RGBA', (width, height), color=0)
+            d = ImageDraw.Draw(img)
+
+            x = width // 2
+            y = height // 2
+            dx = (self.width/2) + gap_w
+            dy = (self.height/2) + gap_h
+            # d.rectangle([x  - dx, y - dy, x + dx, y + dy], fill='red')
+            img.paste(self.tiles[i], box=(x, y))
+                
+            for j, a in enumerate(neighbors[0], start=1):
+                l = x + j * (gap_w + self.width)
+                m = y
+                img.paste(self.tiles[a], box=(l, m))
+            for j, a in enumerate(neighbors[2], start=1):
+                l = x - j * (gap_w + self.width)
+                m = y
+                img.paste(self.tiles[a], box=(l, m))
+            for j, a in enumerate(neighbors[1], start=1):
+                l = x 
+                m = y - j * (gap_h + self.height)
+                img.paste(self.tiles[a], box=(l, m))
+            for j, a in enumerate(neighbors[3], start=1):
+                l = x 
+                m = y + j * (gap_h + self.height)
+                img.paste(self.tiles[a], box=(l, m))
+            img.save(f'{path}/{i}.png')
 
     def to_image(self, fragment): 
         '''
