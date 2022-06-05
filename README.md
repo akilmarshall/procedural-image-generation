@@ -1,4 +1,4 @@
-# Pocedural Image Generation
+# Procedural Image Generation
 
 How can I turn a single image into more images that are somewhat like it?
 
