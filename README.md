@@ -5,10 +5,11 @@ How can I turn a single image into more images that are somewhat like it?
 ## Theory
 
 $\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet**
+also known as a **tile set**
 (a set of rectangular images).
 
 
-[diagram: tile sheet $\to$ tiled image]
+![Images are composed of tile sheets](https://imgur.com/1YtXTpy)
 
 
 $\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
@@ -17,7 +18,8 @@ $$
     \mathbb{T} = \\{t_0, t_1, \cdots{}, t_n\\}
 $$
 
-each tile sheet $\mathbb{T}$ contains $n$ items each denoted $t_i$ where $0\leq i \lt n$.
+each tile set $\mathbb{T}$ contains $n$ items each denoted $t_i$ where
+$0\leq i \lt n$.
 
 Each image $\mathbb{I}$ also has an associated **neighbor** function,
 
@@ -25,16 +27,18 @@ $$
     \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
 $$
 
-that takes a tile and a direction and returns a list of the tiles seen adjacent in the specified direction.
+that takes a tile and a direction and returns a list of the tiles seen adjacent
+in the specified direction.
 
 [diagram: neighbor direction]
 
-Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called **tiled image stastics**.
+Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called
+**tiled image statistics**.
 
 ## tiled-image-tool
 
-A command line tool written in rust for computing statistics from tiled images and procedurally
-generating new images.
+A command line tool written in rust for computing statistics from tiled images
+and procedurally generating new images.
 
 ### Data Pipeline
 
