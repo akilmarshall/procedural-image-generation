@@ -5,12 +5,9 @@ How can I turn a single image into more images that are somewhat like it?
 ## Theory
 
 $\mathbb{I}$ denotes a tiled image, that is an image composed of a **tile sheet**
-also known as a **tile set**
-(a set of rectangular images).
+also known as a **tile set**.
 
-
-![Images are composed of tile sheets](https://imgur.com/1YtXTpy.png)
-
+![An image composed of a tile set](https://imgur.com/kyV0x5N.png)
 
 $\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
 
@@ -20,6 +17,7 @@ $$
 
 each tile set $\mathbb{T}$ contains $n$ items each denoted $t_i$ where
 $0\leq i \lt n$.
+
 
 Each image $\mathbb{I}$ also has an associated **neighbor** function,
 
@@ -39,14 +37,6 @@ Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called
 
 A command line tool written in rust for computing statistics from tiled images
 and procedurally generating new images.
-
-### Data Pipeline
-
-(diagrams coming soon)
-
-tiled_image.png -> TIS(TID) [memory/disk]
-
-TIS(TID) -> Algorithm -> new_image.png
 
 <!---
 ## Image Generation
