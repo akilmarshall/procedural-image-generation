@@ -5,6 +5,7 @@ from shutil import rmtree
 
 from PIL import Image, ImageDraw
 from tqdm import tqdm
+from itertools import product
 
 
 class TIS:
@@ -72,6 +73,23 @@ class TIS:
             out.append(self.nids(i, n))
         return out
 
+    def dump_tile_sheet(self, fname, dim=None, gap=0):
+        def nice_dimensions(n) -> tuple[int, int]:
+            for i in range(n):
+                if i**2 >= n:
+                    return (i, i)
+
+        if dim is None:
+            x, y = nice_dimensions(len(self.tiles))
+        else:
+            x, y = dim
+
+        W = gap + self.width
+        H = gap + self.height
+        img = Image.new('RGBA', ((1 + x) * W, (1 + y) * H), color=0)
+        for t, (h, k) in zip(self.tiles, product(range(x), range(y))):
+            img.paste(t, (h * W, k * H)) 
+        img.save(fname)
     def dump_all_neighbor_split(self):
         '''
         Debug method, dump all tiles and their images in a directory split into sub directories './neigbors/'
