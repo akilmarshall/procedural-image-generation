@@ -77,14 +77,14 @@ The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
 The $SIDE$ algorithm takes three steps:
 
 1. Compute $\\{A, B, C\\}$ directly from $t\_i$,
-    a. select $\\{a, b, c\\}$ from $\\{A, B, C\\}$ respectively.
+    1. select $\\{a, b, c\\}$ from $\\{A, B, C\\}$ respectively.
 2. Compute $\\{D, E\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
    $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively, compute $F$ directly
    from $c$
-    a. select $\\{e, d, f\\}$ from $\\{E, D, F\\}$ respectively.
+    1. select $\\{e, d, f\\}$ from $\\{E, D, F\\}$ respectively.
 3. Compute $\\{H, G\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
    $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively
-    a. select $\\{\\} from $\\{H, G\\}$ respectively.
+    1. select $\\{\\} from $\\{H, G\\}$ respectively.
 
 ## tiled-image-tool
 
