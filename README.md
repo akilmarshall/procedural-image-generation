@@ -87,7 +87,7 @@ The $SIDE$ algorithm takes three steps:
 2. Compute $\\{D, E\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
    $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively, compute $F$ directly
    from $c$
-    1. select $\\{e, d, f\\}$ from $\\{E, D, F\\}$ respectively.
+    1. select $\\{d, e, f\\}$ from $\\{E, D, F\\}$ respectively.
 3. Compute $\\{H, G\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
    $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively
     1. select $\\{h, g\\}$ from $\\{H, G\\}$ respectively.
