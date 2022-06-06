@@ -66,6 +66,8 @@ The $CENTER$ algorithm takes two steps:
    $\mathcal{N}(c, 1)\cap\mathcal{N}(b, 2)$ and,
    $\mathcal{N}(c, 3)\cap\mathcal{N}(d, 2)$ respectively
     1. select $\\{e, f, g, h\\}$ from $\\{E, F, G, H\\}$ respectively.
+    
+![Expanded description of the CENTER algorithm](https://imgur.com/3a8AQ2M.png)
 
 #### SIDE
 
