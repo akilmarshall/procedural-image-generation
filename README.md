@@ -59,9 +59,13 @@ The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 1, t)}$
 
 The $CENTER$ algorithm takes two steps:
 
-1. Select $\\{a, b, c, d\\}$ from $\\{A, B, C, D\\}$ respectively.
-2. Select the corners from the intersections of the combinations of
-   $\\{a, b, c, d\\}$.
+1. Compute $\\{A, B, C, D\\}$ from $t\_i$ directly
+    1. select $\\{a, b, c, d\\} from $\\{A, B, C, D\\}$ respectively.
+2. Compute $\\{E, F, G, H\\}$ from $\mathcal{N}(d, 0)\cap\mathcal{N}(a, 3)$,
+   $\mathcal{N}(b, 0)\cap\mathcal{N}(a, 1)$,
+   $\mathcal{N}(c, 1)\cap\mathcal{N}(b, 2)$ and,
+   $\mathcal{N}(c, 3)\cap\mathcal{N}(d, 2)$ respectively
+    1. select $\\{e, f, g, h\\}$ from $\\{E, F, G, H\\}$ respectively.
 
 #### SIDE
 
