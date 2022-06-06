@@ -112,7 +112,7 @@ The $CORNER$ algorithm takes 4 steps:
 2. Compute $C$ from $\mathcal{N}(b,0)\cap\mathcal{N}(a, 3)$
     1. select $c$ from $C$.
 3. Compute $\\{D, E\\}$ from $c$ directly
-    1. select $\\{d, e}\\$ from $\\{D, E\\}$ respectively.
+    1. select $\\{d, e\\}$ from $\\{D, E\\}$ respectively.
 4. Compute $\\{G, H\\}$ from $\mathcal{N}(e, 0)\cap\mathcal{N}(d, 3)$ and
    $\mathcal{N}(b, 3)\cap\mathcal{N}(e, 2)$ respectively
     1. select $\\{g, h\\}$ from $\\{G, H\\}$ respectively.
