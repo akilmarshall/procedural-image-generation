@@ -66,7 +66,7 @@ The $CENTER$ algorithm takes two steps:
    $\mathcal{N}(c, 1)\cap\mathcal{N}(b, 2)$ and,
    $\mathcal{N}(c, 3)\cap\mathcal{N}(d, 2)$ respectively
     1. select $\\{e, f, g, h\\}$ from $\\{E, F, G, H\\}$ respectively.
-    
+
 ![Expanded description of the CENTER algorithm](https://imgur.com/3a8AQ2M.png)
 
 #### SIDE
@@ -91,6 +91,8 @@ The $SIDE$ algorithm takes three steps:
 3. Compute $\\{H, G\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
    $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively
     1. select $\\{h, g\\}$ from $\\{H, G\\}$ respectively.
+
+![Expanded description of the SIDE algorithm](https://imgur.com/9pCNOWH.png)
 
 ## tiled-image-tool
 
