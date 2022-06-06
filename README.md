@@ -55,7 +55,7 @@ Fix $(1, 1)$ in $\mathcal{F}$ with $t\_i$
 
 The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 1, t)}$
 
-![Compact description of the CENTER algorithm](https://imgur.com/uGglv8O.png)
+![Compact description of the CENTER algorithm](https://imgur.com/6aTonSZ.png)
 
 The $CENTER$ algorithm takes two steps:
 
@@ -78,7 +78,7 @@ Fix $(1, 0)$ in $\mathcal{F}$ with $t\_i$
 The $SIDE$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
 (or any of its symmetries, $(0, 1), (2, 1), (1, 2)$).
 
-![Compact description of the SIDE algorithm](https://imgur.com/5PZFTcu.png)
+![Compact description of the SIDE algorithm](https://imgur.com/Zl25lMH.png)
 
 The $SIDE$ algorithm takes three steps:
 
@@ -103,7 +103,7 @@ Fix $(0, 0$ in $\mathcal{F}$ with $t\_i$
 The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(0, 0, t)}$
 (or any of its symmetries, $(2, 0), (0, 2), (2, 2)$).
 
-![Compact description of the CORNER algorithm](https://imgur.com/RdAMiJD.png)
+![Compact description of the CORNER algorithm](https://imgur.com/rFC2iIA.png)
 
 The $CORNER$ algorithm takes 4 steps:
 
