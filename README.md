@@ -78,7 +78,7 @@ Fix $(1, 0)$ in $\mathcal{F}$ with $t\_i$
 The $SIDE$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
 (or any of its symmetries, $(0, 1), (2, 1), (1, 2)$).
 
-![Compact description of the SIDE algorithm](https://imgur.com/nzawvgs.png)
+![Compact description of the SIDE algorithm](https://imgur.com/5PZFTcu.png)
 
 The $SIDE$ algorithm takes three steps:
 
@@ -93,6 +93,24 @@ The $SIDE$ algorithm takes three steps:
     1. select $\\{h, g\\}$ from $\\{H, G\\}$ respectively.
 
 ![Expanded description of the SIDE algorithm](https://imgur.com/9pCNOWH.png)
+
+#### CORNER
+
+Fix $(0, 0$ in $\mathcal{F}$ with $t\_i$
+
+![Fixed corner fragment](https://imgur.com/5hKbibw.png)
+
+The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(0, 0, t)}$
+(or any of its symmetries, $(2, 0), (0, 2), (2, 2)$).
+
+![Compact description of the CORNER algorithm](https://imgur.com/RdAMiJD.png)
+
+The $CORNER$ algorithm takes 4 steps:
+
+1. step
+2. step
+3. step
+4. step
 
 ## tiled-image-tool
 
