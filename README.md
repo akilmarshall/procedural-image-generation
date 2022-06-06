@@ -98,7 +98,7 @@ The $SIDE$ algorithm takes three steps:
 
 Fix $(0, 0$ in $\mathcal{F}$ with $t\_i$
 
-![Fixed corner fragment](https://imgur.com/5hKbibw.png)
+![Fixed corner fragment](https://i.imgur.com/47VGTuz.png)
 
 The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(0, 0, t)}$
 (or any of its symmetries, $(2, 0), (0, 2), (2, 2)$).
@@ -107,10 +107,17 @@ The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(0, 0, t)}$
 
 The $CORNER$ algorithm takes 4 steps:
 
-1. step
-2. step
-3. step
-4. step
+1. Compute $\\{A, B\\}$ directly from $t$
+    1. select $\\{a, b\\}$ from $\\{A, B\\}$ respectively.
+2. Compute $C$ from $\mathcal{N}(b,0)\cap\mathcal{N}(a, 3)$
+    1. select $c$ from $C$.
+3. Compute $\\{D, E\\}$ from $c$ directly
+    1. select $\\{d, e}\\$ from $\\{D, E\\}$ respectively.
+4. Compute $\\{G, H\\}$ from $\mathcal{N}(e, 0)\cap\mathcal{N}(d, 3)$ and
+   $\mathcal{N}(b, 3)\cap\mathcal{N}(e, 2)$ respectively
+    1. select $\\{g, h\\}$ from $\\{G, H\\}$ respectively.
+
+![Explanded description of the CORNER algorithm](https://imgur.com/IRQ4Ppm.png)
 
 ## tiled-image-tool
 
