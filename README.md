@@ -12,11 +12,11 @@ also known as a **tile set**.
 $\mathbb{T}$ denotes the tile sheet of $\mathbb{I}$,
 
 $$
-    \mathbb{T} = \\{t_0, t_1, \cdots{}, t_n\\}
+    \mathbb{T} = \\{t_1, t_2, \cdots{}, t_n\\}
 $$
 
 each tile set $\mathbb{T}$ contains $n$ items each denoted $t_i$ where
-$0\leq i \lt n$.
+$1\leq i \leq n$.
 
 
 Each image $\mathbb{I}$ also has an associated **neighbor** function,
@@ -33,12 +33,12 @@ in the specified direction $\\{0, 1, 2, 3\\}$.
 ![Neigbor directions](https://imgur.com/9MSJKR7.png)
 
 Together $(\mathbb{I}, \mathbb{T}, \mathcal{N})$ can be called
-**tiled image statistics**.
+**tiled image statistics** (TIS).
 
 ## Procedures
 
 Here I describe a variety of data structures and algorithms for procedural image
-generation.
+generation using TIS.
 
 ### Fragment
 
