@@ -49,18 +49,19 @@ expansion algorithm.
 
 #### CENTER
 
-Fix the $(1, 1)$ position in $\mathcal{F}$ with $t_i$
+Fix $(1, 1)$ in $\mathcal{F}$ with $t_i$
 
 ![Fixed center fragment](https://i.imgur.com/neGHmd4.png)
 
 The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}_{(1, 1, t)}$
 
-![Description of the CENTER algorithm](https://i.imgur.com/cYXYB2n.png)
+![Description of the CENTER algorithm](https://i.imgur.com/hVjVH0B.png)
 
 The $CENTER$ algorithm takes two steps:
 
 1. Select $\\{a, b, c, d\\}$ from $\\{A, B, C, D\\}$ respectively.
-2. Select the corners from the intersections of the combinations of $\\{a, b, c, d\\}$.
+2. Select the corners from the intersections of the combinations of 
+   $\\{a, b, c, d\\}$.
 
 
 ## tiled-image-tool
