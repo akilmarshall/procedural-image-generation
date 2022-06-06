@@ -15,7 +15,7 @@ $$
     \mathbb{T} = \\{t_1, t_2, \cdots{}, t_n\\}
 $$
 
-each tile set $\mathbb{T}$ contains $n$ items each denoted $t_i$ where
+each tile set $\mathbb{T}$ contains $n$ items each denoted $t\_i$ where
 $1\leq i \leq n$.
 
 
@@ -49,7 +49,7 @@ expansion algorithm.
 
 #### CENTER
 
-Fix $(1, 1)$ in $\mathcal{F}$ with $t_i$
+Fix $(1, 1)$ in $\mathcal{F}$ with $t\_i$
 
 ![Fixed center fragment](https://i.imgur.com/neGHmd4.png)
 
@@ -84,7 +84,7 @@ The $SIDE$ algorithm takes three steps:
     1. select $\\{e, d, f\\}$ from $\\{E, D, F\\}$ respectively.
 3. Compute $\\{H, G\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
    $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively
-    1. select $\\{\\} from $\\{H, G\\}$ respectively.
+    1. select $\\{h, g\\}$ from $\\{H, G\\}$ respectively.
 
 ## tiled-image-tool
 
