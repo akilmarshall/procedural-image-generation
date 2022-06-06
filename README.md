@@ -75,7 +75,7 @@ Fix $(1, 0)$ in $\mathcal{F}$ with $t\_i$
 
 ![Fixed side fragment](https://i.imgur.com/dYE0thP.png)
 
-The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
+The $SIDE$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
 (or any of its symmetries, $(0, 1), (2, 1), (1, 2)$).
 
 ![Compact description of the SIDE algorithm](https://imgur.com/nzawvgs.png)
