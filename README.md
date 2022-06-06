@@ -53,16 +53,38 @@ Fix $(1, 1)$ in $\mathcal{F}$ with $t_i$
 
 ![Fixed center fragment](https://i.imgur.com/neGHmd4.png)
 
-The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}_{(1, 1, t)}$
+The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 1, t)}$
 
-![Description of the CENTER algorithm](https://i.imgur.com/hVjVH0B.png)
+![Compact description of the CENTER algorithm](https://imgur.com/uGglv8O.png)
 
 The $CENTER$ algorithm takes two steps:
 
 1. Select $\\{a, b, c, d\\}$ from $\\{A, B, C, D\\}$ respectively.
-2. Select the corners from the intersections of the combinations of 
+2. Select the corners from the intersections of the combinations of
    $\\{a, b, c, d\\}$.
 
+#### SIDE
+
+Fix $(1, 0)$ in $\mathcal{F}$ with $t\_i$
+
+![Fixed side fragment](https://i.imgur.com/dYE0thP.png)
+
+The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
+(or any of its symmetries, $(0, 1), (2, 1), (1, 2)$).
+
+![Compact description of the SIDE algorithm](https://imgur.com/nzawvgs.png)
+
+The $SIDE$ algorithm takes three steps:
+
+1. Compute $\\{A, B, C\\}$ directly from $t\_i$,
+    a. select $\\{a, b, c\\}$ from $\\{A, B, C\\}$ respectively.
+2. Compute $\\{D, E\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
+   $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively, compute $F$ directly
+   from $c$
+    a. select $\\{e, d, f\\}$ from $\\{E, D, F\\}$ respectively.
+3. Compute $\\{H, G\\}$ from $\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2)$ and
+   $\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)$ respectively
+    a. select $\\{\\} from $\\{H, G\\}$ respectively.
 
 ## tiled-image-tool
 
