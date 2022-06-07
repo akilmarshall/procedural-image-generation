@@ -119,56 +119,37 @@ The $CORNER$ algorithm takes 4 steps:
 
 ![Explanded description of the CORNER algorithm](https://imgur.com/IRQ4Ppm.png)
 
+### Edge Expansion
+
+Considering a fragment member how can it's edge's be expanded?
+
+![Fragment member in a larger undefined tile space](https://i.imgur.com/UizrRbB.png)
+
+Considering a fragment member is $D\_4$ (symmetry group of the square) any
+algorithm written to expand a specific edge can be transformed into an
+equivalent algorithm for another edge. There for all expansion algorithms
+described will be described for a single edge only.
+
+
+I propose 3 algorithms, 2 of which are mirrored for computing the edge expansion
+of 
+$$
+\begin{bmatrix}
+    t\_0\\t\_1\\t\_2
+\end{bmatrix}
+$$,
+
+$CENTERX$ and $CORNERX$ (and it's mirror).
+
+#### CENTERX
+
+![CENTERX algorithm compact description](https://i.imgur.com/kVaGKgF.png)
+
+#### CORNERX
+
+![CORNERX algorithm compact description](https://i.imgur.com/J76wjP9.png)
+
 ## tiled-image-tool
 
 A command line tool written in rust for computing statistics from tiled images
 and procedurally generating new images.
-
-<!---
-## Image Generation
-## Python Modules
-
-### pygen
-
-A module to facilitate quick experimenting of image generation strategies.
-
-### Fragments
-
-A fragment is a 3x3 tiled image with a single fixed tile.
-
-```
-A B C
-D E F
-G H I
-```
-
-Center Fragment:
-
-The center tile is fixed, {F, B, D, H} can be directly inferred from E via TIS.
-
-```
-  b
-d E f
-  h
-```
-  
-The above is known as the set of core images of E where {f, b, d, h} vary over {F, B, D, H}.
-For any core its corners are varied over the set intersections of it's neighbors.
-
-```
-A = B \intersection D
-C = B \intersection F
-G = D \intersection I
-I = H \intersection F
-```
-
-### Questions
-
-- Are all fragment generation strategies made equal? Does it matter if I fix the center or a corner?:
-    - counter example says NO.
-
-## Todo
-
-- pursue image generation via fragment database. TIS -> DB -> Image GEN
-    - can this be done without the database? TIS -> Image GEN 
---->
