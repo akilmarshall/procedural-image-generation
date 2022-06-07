@@ -53,11 +53,21 @@ $$
 
 Fix $(1, 1)$ in $\mathcal{F}$ with $t\_i$
 
-![Fixed center fragment](https://i.imgur.com/neGHmd4.png)
+$$
+    \mathcal{F}\_{(1, 1, t\_i)}=
+    \mathcal{F}={\left\lbrack \matrix{  &   &   \cr   & t\_i &   \cr   &   &  } \right\rbrack}
+$$
 
 The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 1, t)}$
 
-![Compact description of the CENTER algorithm](https://imgur.com/6aTonSZ.png)
+$$
+    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle=
+    \mathcal{F}={\left\lbrack \matrix{
+    G=\mathcal{N}(c, 1)\cap \mathcal{N}(b, 2)  & B=\mathcal{N}(t,1) & F=\mathcal{N}(b, 0)\cap \mathcal{N}(a, 1) \cr
+    C=\mathcal{N}(t,2) & t & A=\mathcal{N}(t,0) \cr
+    H=\mathcal{N}(c, 3)\cap \mathcal{N}(d, 2) & D=\mathcal{N}(t,3) & E=\mathcal{N}(d, 0)\cap \mathcal{N}(a, 3) 
+    } \right\rbrack}
+$$
 
 The $CENTER$ algorithm takes two steps:
 
