@@ -190,7 +190,7 @@ t\_2&C=\mathcal{N}(t\_2, 0)\cap\mathcal{N}(b, 3)
 $$
 
 $$
-CORNERX_{mirror}=
+CORNERX\approx
 {\left\lbrack \matrix{
 t\_0&C=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(b, 1) \cr
 t\_1&B=\mathcal{N}(t\_1, 0)\cap\mathcal{N}(a, 1) \cr
