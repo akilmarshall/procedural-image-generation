@@ -152,7 +152,9 @@ The $CORNER$ algorithm takes 4 steps:
 
 Considering a fragment member how can it's edge's be expanded?
 
-![Fragment member in a larger undefined tile space](https://i.imgur.com/UizrRbB.png)
+$$
+   \mathcal{F}={\left\lbrack \matrix{& & & &\cr & a & b & c & \cr & d & e & f & \cr & h & i & j & \cr & & & &} \right\rbrack}
+$$
 
 Considering a fragment member is $D\_4$ (symmetry group of the square) any
 algorithm written to expand a specific edge can be transformed into an
@@ -172,11 +174,18 @@ $CENTERX$ and $CORNERX$ (and it's mirror).
 
 #### CENTERX
 
-![CENTERX algorithm compact description](https://i.imgur.com/kVaGKgF.png)
+
+$$
+CENTERX=
+{\left\lbrack \matrix{t\_0&B=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(a, 1) \cr t\_1&A=\mathcal{N}(t\_1, 0) \cr t\_2&C=\mathcal{N}(t|_2, 0)\cap\mathcal{N}(a, 3) } \right\rbrack}
+$$
 
 #### CORNERX
 
-![CORNERX algorithm compact description](https://i.imgur.com/J76wjP9.png)
+$$
+CORNERX=
+{\left\lbrack \matrix{t\_0&B=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(a, 1) \cr t\_1&A=\mathcal{N}(t\_1, 0) \cr t\_2&C=\mathcal{N}(t|_2, 0)\cap\mathcal{N}(a, 3) } \right\rbrack}
+$$
 
 ## tiled-image-tool
 
