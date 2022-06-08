@@ -93,7 +93,7 @@ The $SIDE$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
 (or any of its symmetries, $(0, 1), (2, 1), (1, 2)$).
 
 $$
-    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle={\left\lbrack \matrix{
+    SIDE\langle\mathcal{F}_{(1, 1, t)}\rangle={\left\lbrack \matrix{
     B=\mathcal{N}(t, 2) & t & A=\mathcal{N}(t, 0) \cr
     D=\mathcal{N}(b, 3)\cap\mathcal{N}(c, 2) & C=\mathcal{N}(t, 3) & E=\mathcal{N}(a, 3)\cap\mathcal{N}(c, 0) \cr
     H=\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2) & F=\mathcal{N}(c, 3) & G=\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)
@@ -116,14 +116,23 @@ The $SIDE$ algorithm takes three steps:
 
 #### CORNER
 
-Fix $(0, 0$ in $\mathcal{F}$ with $t\_i$
+Fix $(0, 0)$ in $\mathcal{F}$ with $t\_i$
 
-![Fixed corner fragment](https://i.imgur.com/47VGTuz.png)
+$$
+\mathcal{F}\_{(0, 0, t\_i)}=
+{\left\lbrack \matrix{t\_i  &   &   \cr  &  &   \cr   &   &  } \right\rbrack}
+$$
 
 The $CORNER$ algorithm expands a fragment of the form $\mathcal{F}\_{(0, 0, t)}$
 (or any of its symmetries, $(2, 0), (0, 2), (2, 2)$).
 
-![Compact description of the CORNER algorithm](https://imgur.com/rFC2iIA.png)
+$$
+    CORNER\langle\mathcal{F}_{(1, 1, t)}\rangle={\left\lbrack \matrix{
+    t & A=\mathcal{N}(t,2) & F=\mathcal{N}(b, 0)\cap \mathcal{N}(a, 1) \cr
+    B=\mathcal{N}(t,1) & C = \mathcal{N}(b, 0)\cap \mathcal{N}(a, 3) & D=\mathcal{N}(c,0) \cr
+    H=\mathcal{N}(b, 3)\cap \mathcal{N}(e, 2) & E=\mathcal{N}(c,3) & G=\mathcal{N}(e, 0)\cap \mathcal{N}(d, 3)
+    } \right\rbrack}
+$$
 
 The $CORNER$ algorithm takes 4 steps:
 
