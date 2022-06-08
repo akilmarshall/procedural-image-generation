@@ -55,14 +55,13 @@ Fix $(1, 1)$ in $\mathcal{F}$ with $t\_i$
 
 $$
     \mathcal{F}\_{(1, 1, t\_i)}=
-    \mathcal{F}={\left\lbrack \matrix{  &   &   \cr   & t\_i &   \cr   &   &  } \right\rbrack}
+    {\left\lbrack \matrix{  &   &   \cr   & t\_i &   \cr   &   &  } \right\rbrack}
 $$
 
 The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 1, t)}$
 
 $$
-    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle=
-    \mathcal{F}={\left\lbrack \matrix{
+    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle={\left\lbrack \matrix{
     G=\mathcal{N}(c, 1)\cap \mathcal{N}(b, 2)  & B=\mathcal{N}(t,1) & F=\mathcal{N}(b, 0)\cap \mathcal{N}(a, 1) \cr
     C=\mathcal{N}(t,2) & t & A=\mathcal{N}(t,0) \cr
     H=\mathcal{N}(c, 3)\cap \mathcal{N}(d, 2) & D=\mathcal{N}(t,3) & E=\mathcal{N}(d, 0)\cap \mathcal{N}(a, 3) 
@@ -85,12 +84,21 @@ The $CENTER$ algorithm takes two steps:
 
 Fix $(1, 0)$ in $\mathcal{F}$ with $t\_i$
 
-![Fixed side fragment](https://i.imgur.com/dYE0thP.png)
+$$
+\mathcal{F}\_{(1, 0, t\_i)}=
+{\left\lbrack \matrix{  & t\_i  &   \cr  &  &   \cr   &   &  } \right\rbrack}
+$$
 
 The $SIDE$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 0, t)}$
 (or any of its symmetries, $(0, 1), (2, 1), (1, 2)$).
 
-![Compact description of the SIDE algorithm](https://imgur.com/Zl25lMH.png)
+$$
+    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle={\left\lbrack \matrix{
+    B=\mathcal{N}(t, 2) & t & A=\mathcal{N}(t, 0) \cr
+    D=\mathcal{N}(b, 3)\cap\mathcal{N}(c, 2) & C=\mathcal{N}(t, 3) & E=\mathcal{N}(a, 3)\cap\mathcal{N}(c, 0) \cr
+    H=\mathcal{N}(d, 3)\cap\mathcal{N}(f, 2) & F=\mathcal{N}(c, 3) & G=\mathcal{N}(f, 0)\cap\mathcal{N}(e, 2)
+    } \right\rbrack}
+$$
 
 The $SIDE$ algorithm takes three steps:
 
