@@ -187,16 +187,15 @@ t\_0&A=\mathcal{N}(t\_0, 0) \cr
 t\_1&B=\mathcal{N}(t\_1, 0)\cap\mathcal{N}(a, 3) \cr
 t\_2&C=\mathcal{N}(t\_2, 0)\cap\mathcal{N}(b, 3)
 } \right\rbrack}
-\approx
-{\left\lbrack \matrix{
-t\_0&C=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(b, 1) \cr
-t\_1&B=\mathcal{N}(t\_1, 0)\cap\mathcal{N}([a](a), 1) \cr
-t\_2&A=\mathcal{N}(t\_2, 0)
-}\right\rbrack}
 $$
 
 $$
-CORNERX_{mirro}=
+CORNERX_{mirror}=
+{\left\lbrack \matrix{
+t\_0&C=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(b, 1) \cr
+t\_1&B=\mathcal{N}(t\_1, 0)\cap\mathcal{N}(a, 1) \cr
+t\_2&A=\mathcal{N}(t\_2, 0)
+}\right\rbrack}
 $$
 
 ## tiled-image-tool
