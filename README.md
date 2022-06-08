@@ -163,7 +163,8 @@ described will be described for a single edge only.
 
 
 I propose 3 algorithms, 2 of which are mirrored for computing the edge expansion
-of 
+of
+
 $$
 {\left\lbrack \matrix{t\_0 \cr t\_1 \cr t\_2 } \right\rbrack},
 $$
