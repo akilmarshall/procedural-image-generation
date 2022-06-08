@@ -165,26 +165,25 @@ described will be described for a single edge only.
 I propose 3 algorithms, 2 of which are mirrored for computing the edge expansion
 of 
 $$
-\begin{bmatrix}
-    t\_0\\t\_1\\t\_2
-\end{bmatrix}
+{\left\lbrack \matrix{
+    t\_0 \cr t\_1 \cr t\_2
+} \right\rbrack}
 $$,
 
 $CENTERX$ and $CORNERX$ (and it's mirror).
 
 #### CENTERX
 
-
 $$
 CENTERX=
-{\left\lbrack \matrix{t\_0&B=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(a, 1) \cr t\_1&A=\mathcal{N}(t\_1, 0) \cr t\_2&C=\mathcal{N}(t|_2, 0)\cap\mathcal{N}(a, 3) } \right\rbrack}
+{\left\lbrack \matrix{t\_0&B=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(a, 1) \cr t\_1&A=\mathcal{N}(t\_1, 0) \cr t\_2&C=\mathcal{N}(t\_2, 0)\cap\mathcal{N}(a, 3) } \right\rbrack}
 $$
 
 #### CORNERX
 
 $$
 CORNERX=
-{\left\lbrack \matrix{t\_0&B=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(a, 1) \cr t\_1&A=\mathcal{N}(t\_1, 0) \cr t\_2&C=\mathcal{N}(t|_2, 0)\cap\mathcal{N}(a, 3) } \right\rbrack}
+{\left\lbrack \matrix{t\_0&B=\mathcal{N}(t\_0, 0)\cap\mathcal{N}(a, 1) \cr t\_1&A=\mathcal{N}(t\_1, 0) \cr t\_2&C=\mathcal{N}(t\_2, 0)\cap\mathcal{N}(a, 3) } \right\rbrack}
 $$
 
 ## tiled-image-tool
