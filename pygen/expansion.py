@@ -4,16 +4,18 @@ from .fragment import Fragment
 
 
 class Store:
-    '''
+    """
     A collection of fragments
-    '''
-    def __init__(self, tis:TIS):
+    """
+
+    def __init__(self, tis: TIS):
         self.store = []
         fragment = Fragment(tis)
         for i in range(tis.n):
-            for frag in chain(fragment.center_fragment(i), fragment.corner_fragment(i), fragment.side_fragment(i)):
+            for frag in chain(fragment.CENTER(i), fragment.CORNER(i), fragment.SIDE(i)):
                 self.store.append(frag)
-    def query(self, strip:list[int], edge:int):
+
+    def query(self, strip: list[int], edge: int):
         assert 0 <= edge < 4
         assert len(strip) == 3
         for frag in self.store:
@@ -54,9 +56,9 @@ class Expander:
     def cornerx(self, strip, mirror=None):
         assert len(strip) == 3
         if mirror:
-            self._cornerx_L(strip)
+            return self._cornerx_L(strip)
         else:
-            self._cornerx_R(strip)
+            return self._cornerx_R(strip)
 
     def _cornerx_L(self, strip):
         out = [None] * 3
@@ -65,7 +67,9 @@ class Expander:
             B = set(self.tis.nids(strip[1], 0)).intersection(set(self.tis.nids(a, 3)))
             for b in B:
                 out[1] = b
-                C = set(self.tis.nids(strip[2], 0)).intersection(set(self.tis.nids(b, 3)))
+                C = set(self.tis.nids(strip[2], 0)).intersection(
+                    set(self.tis.nids(b, 3))
+                )
                 for c in C:
                     out[2] = c
                     yield out
@@ -77,8 +81,9 @@ class Expander:
             B = set(self.tis.nids(strip[1], 0)).intersection(set(self.tis.nids(a, 1)))
             for b in B:
                 out[1] = b
-                C = set(self.tis.nids(strip[0], 0)).intersection(set(self.tis.nids(b, 1)))
+                C = set(self.tis.nids(strip[0], 0)).intersection(
+                    set(self.tis.nids(b, 1))
+                )
                 for c in C:
                     out[0] = c
                     yield out
-

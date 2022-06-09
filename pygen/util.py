@@ -9,51 +9,58 @@ from itertools import product
 
 
 class TIS:
-    '''
-    Tiled Image Statistics. 
-    Loads TIS as created by the tit tool, offers useful methods to access TIS data
-    '''
-    def __init__(self, path='TIS'):
+    """
+    Tiled Image Statistics.
+    Loads TIS as created by the tit binary
+    """
+
+    def __init__(self, path="TIS"):
         self.path = path
-        with open('TIS/TIS.json', 'r') as f:
+        with open("TIS/TIS.json", "r") as f:
             tid = json.load(f)
-            self.n = tid['n']
-            self.width = tid['width']
-            self.height = tid['height']
-            self._setup(tid['mapping'])
+            self.n = tid["n"]
+            self.width = tid["width"]
+            self.height = tid["height"]
+            self._setup(tid["mapping"])
 
     def _setup(self, mapping):
         self.mapping = []
         for data in mapping:
             neighbors = []
             for n in data:
-                neighbors.append(n['data'])
+                neighbors.append(n["data"])
             self.mapping.append(neighbors)
         self.tiles = []
-        for i in range(self.n):
-            self.tiles.append(Image.open(f'{self.path}/tiles/{i}.png'))
 
-    def nids(self, t, n): 
-        '''
-        for tile t and neigbor n, return a list (set) of neighbor ids
-          1
-        2 t 0
-          3
-        '''
+        for i in range(self.n):
+            self.tiles.append(Image.open(f"{self.path}/tiles/{i}.png"))
+
+    def __call__(self, tid, direction):
+        """
+        Shorthand to the Neighbor function
+        tile id -> direction -> [tile id]
+        """
+        return self.nids(tid, direction)
+
+    def nids(self, t, n) -> list[int]:
+        """
+        Neighbor function.
+        tile id -> direction -> neighbor list
+        """
         assert 0 <= t < self.n
         assert 0 <= n < 4
         ids = []
-        for (i,x) in enumerate(self.mapping[t][n]):
+        for (i, x) in enumerate(self.mapping[t][n]):
             if x > 0:
                 ids.append(i)
         return ids
 
     def intersect(self, u, x, v, y):
-        '''
+        """
         Compute the intersection of u_x and v_y.
         tile ids: {u, v}
         neigbor set {x, y}
-        '''
+        """
         assert 0 <= u < self.n
         assert 0 <= v < self.n
         assert x in [0, 1, 2, 3]
@@ -63,10 +70,10 @@ class TIS:
         return A.intersection(B)
 
     def neighbors(self, i):
-        '''
+        """
         For a tile i, return a list of its neighbor lists (set)
         [i0, i1, i2, i3] where in is a list (set)
-        '''
+        """
         assert 0 <= i < self.n
         out = []
         for n in range(4):
@@ -74,6 +81,14 @@ class TIS:
         return out
 
     def dump_tile_sheet(self, fname, dim=None, gap=0):
+        """
+        Save a tile sheet to file
+        fname   file name of the tilesheet image
+        dim     optionally specify how many rows and cols to use
+                for the tilesheet
+        gap     number of pixels between the tiles
+        """
+
         def nice_dimensions(n) -> tuple[int, int]:
             for i in range(n):
                 if i**2 >= n:
@@ -86,35 +101,36 @@ class TIS:
 
         W = gap + self.width
         H = gap + self.height
-        img = Image.new('RGBA', ((1 + x) * W, (1 + y) * H), color=0)
+        img = Image.new("RGBA", ((1 + x) * W, (1 + y) * H), color=0)
         for t, (h, k) in zip(self.tiles, product(range(x), range(y))):
-            img.paste(t, (h * W, k * H)) 
+            img.paste(t, (h * W, k * H))
         img.save(fname)
+
     def dump_all_neighbor_split(self):
-        '''
+        """
         Debug method, dump all tiles and their images in a directory split into sub directories './neigbors/'
-        '''
-        print('Neighbors')
-        path = 'neighbors'
+        """
+        print("Neighbors")
+        path = "neighbors"
         if exists(path):
             rmtree(path)
         mkdir(path)
         for i in tqdm(range(self.n)):
-            local =f'{path}/{i}' 
+            local = f"{path}/{i}"
             mkdir(local)
-            self.tiles[i].save(f'{local}/{i}.png')
+            self.tiles[i].save(f"{local}/{i}.png")
             for n, nids in enumerate(self.neighbors(i)):
-                final = f'{local}/{n}'
+                final = f"{local}/{n}"
                 mkdir(final)
                 for nid in nids:
-                    self.tiles[nid].save(f'{final}/{nid}.png')
+                    self.tiles[nid].save(f"{final}/{nid}.png")
 
     def dump_all_neighbor(self):
-        '''
+        """
         Debug method, dump all tiles and their images in a directory './neigbors/'
-        '''
-        print('Neighbors')
-        path = 'neighbors'
+        """
+        print("Neighbors")
+        path = "neighbors"
         if exists(path):
             rmtree(path)
         mkdir(path)
@@ -123,23 +139,22 @@ class TIS:
             for n, nids in enumerate(self.neighbors(i)):
                 neighbors[n] = nids
             gap_w = self.width // 8
-            gap_h = self.height // 8 
+            gap_h = self.height // 8
             margin = 2 * max(self.width, self.height)
             w = 1 + len(neighbors[0]) + len(neighbors[2])
             h = 1 + len(neighbors[1]) + len(neighbors[3])
 
             width = (w * self.width) + (2 * margin) + (w * gap_w)
             height = (h * self.height) + (2 * margin) + ((h - 1) * gap_h)
-            img = Image.new('RGBA', (width, height), color=0)
+            img = Image.new("RGBA", (width, height), color=0)
             d = ImageDraw.Draw(img)
 
             x = width // 2
             y = height // 2
-            dx = (self.width/2) + gap_w
-            dy = (self.height/2) + gap_h
-            # d.rectangle([x  - dx, y - dy, x + dx, y + dy], fill='red')
+            dx = (self.width / 2) + gap_w
+            dy = (self.height / 2) + gap_h
             img.paste(self.tiles[i], box=(x, y))
-                
+
             for j, a in enumerate(neighbors[0], start=1):
                 l = x + j * (gap_w + self.width)
                 m = y
@@ -149,22 +164,22 @@ class TIS:
                 m = y
                 img.paste(self.tiles[a], box=(l, m))
             for j, a in enumerate(neighbors[1], start=1):
-                l = x 
+                l = x
                 m = y - j * (gap_h + self.height)
                 img.paste(self.tiles[a], box=(l, m))
             for j, a in enumerate(neighbors[3], start=1):
-                l = x 
+                l = x
                 m = y + j * (gap_h + self.height)
                 img.paste(self.tiles[a], box=(l, m))
-            img.save(f'{path}/{i}.png')
+            img.save(f"{path}/{i}.png")
 
-    def to_image(self, fragment): 
-        '''
+    def to_image(self, fragment):
+        """
         convert a id matrix to Image
-        '''
+        """
         height = len(fragment)
         width = len(fragment[0])
-        img = Image.new('RGBA', (width * self.width, height * self.height), color=0)
+        img = Image.new("RGBA", (width * self.width, height * self.height), color=0)
         for x in range(width):
             for y in range(height):
                 h = x * self.width
