@@ -177,11 +177,11 @@ class TIS:
         """
         convert a id matrix to Image
         """
-        height = len(fragment)
-        width = len(fragment[0])
-        img = Image.new("RGBA", (width * self.width, height * self.height), color=0)
-        for x in range(width):
-            for y in range(height):
+        cols = len(fragment)
+        rows = len(fragment[0])
+        img = Image.new("RGBA", (cols * self.width, rows * self.height), color=0)
+        for x in range(cols):
+            for y in range(rows):
                 h = x * self.width
                 k = y * self.height
                 t = fragment[x][y]
