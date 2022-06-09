@@ -97,7 +97,7 @@ def generate(n: int, m: int, tis: TIS, verbose:bool, log:bool):
         ith = 0
     while len(active) > 0:
         if verbose:
-            if i % 1000:
+            if i % 1000 == 0:
                 print(len(active))
             i += 1
         if log:
