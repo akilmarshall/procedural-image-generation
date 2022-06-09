@@ -180,12 +180,11 @@ class TIS:
         cols = len(fragment)
         rows = len(fragment[0])
         img = Image.new("RGBA", (cols * self.width, rows * self.height), color=0)
-        for x in range(cols):
-            for y in range(rows):
-                h = x * self.width
-                k = y * self.height
-                t = fragment[x][y]
-                if t is not None:
-                    img.paste(self.tiles[t], box=(h, k))
+        for x, y in product(range(cols),range(rows)):
+            h = x * self.width
+            k = y * self.height
+            t = fragment[x][y]
+            if t is not None:
+                img.paste(self.tiles[t], box=(h, k))
 
         return img

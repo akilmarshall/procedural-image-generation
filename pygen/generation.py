@@ -1,5 +1,4 @@
 from pygen.util import TIS
-from pygen.fragment import Fragment
 from itertools import product
 from copy import deepcopy
 from collections import deque
@@ -29,6 +28,17 @@ class Image:
             if isinstance(t, set):
                 return False
         return True
+    def good(self) -> bool:
+        """
+        return True if the image is fully collapsed and defined
+        i.e. contains no None
+        False otherwise
+        """
+        if self.complete():
+            for h, k in self._indicies():
+                if self.img[h][k] is None:
+                    return False
+        return True
 
     def min_entropy(self) -> tuple[int, int]:
         e = None
@@ -51,11 +61,11 @@ class Image:
         if x < self.n - 1 and isinstance(self.img[x + 1][y], set):
             yield 0, x + 1, y
         if y < self.m - 1 and isinstance(self.img[x][y + 1], set):
-            yield 1, x, y + 1
+            yield 3, x, y + 1
         if x > 0 and isinstance(self.img[x - 1][y], set):
             yield 2, x - 1, y
         if y > 0 and isinstance(self.img[x][y - 1], set):
-            yield 3, x, y - 1
+            yield 1, x, y - 1
 
     def collapse(self, h: int, k: int, t: int):
         if t in self.img[h][k]:
@@ -78,13 +88,14 @@ def generate(n: int, m: int, tis: TIS):
     active = deque()
     active.append(Image(n, m, tis))
     while len(active) > 0:
+        print(len(active))
         img = active.popleft()
         x, y = img.min_entropy()
         for t in img[x][y]:
             fork = img.copy()
             fork.collapse(x, y, t)
             if fork.complete():
-                yield fork.to_image()
+                yield fork
             else:
                 active.append(fork)
 
@@ -93,5 +104,10 @@ def sudoku_dump(n: int, m: int, tis: TIS, path: str):
     if exists(path):
         rmtree(path)
     mkdir(path)
+    mkdir(f'{path}/partial')
     for i, img in enumerate(generate(n, m, tis)):
-        img.save(f"{path}/{i}.png")
+        out = img.to_image()
+        if img.good():
+            out.save(f"{path}/{i}.png")
+        else:
+            out.save(f"{path}/partial/{i}.png")

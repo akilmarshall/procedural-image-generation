@@ -3,6 +3,7 @@ from os import mkdir
 from os.path import exists
 from shutil import rmtree
 from itertools import chain
+from .util import TIS
 
 from tqdm import tqdm
 
