@@ -1,4 +1,5 @@
 //! ~~eugenics~~ I mean Genetic Algorithms
+/*
 use crate::genetic::{cross, Individual};
 use crate::image::{IDMatrix, TID};
 use priority_queue::DoublePriorityQueue;
@@ -90,3 +91,4 @@ impl GA {
         }
     }
 }
+*/

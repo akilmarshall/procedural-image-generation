@@ -1,4 +1,5 @@
 //! API for ~~eugenics~~ I mean Genetic Algorithms
+/*
 use crate::image::{IDMatrix, TID};
 use rand::Rng;
 
@@ -153,3 +154,4 @@ fn idmatrix_to_dna(i: IDMatrix) -> Vec<usize> {
         })
         .collect()
 }
+*/

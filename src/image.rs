@@ -8,6 +8,9 @@ use std::fs;
 use std::fs::{read_dir, DirBuilder, File};
 use std::io::Write;
 
+/// A type for directions, TODO: turn into an enum
+pub type direction = usize;
+
 /// Counter object specialized to usize.
 /// Provides an interface to increase and query statistics about the group.
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -56,8 +59,48 @@ impl Counter {
     }
 }
 
+/// Generic flat matrix
+#[derive(Clone)]
+pub struct Matrix<T> {
+    rows: usize,
+    cols: usize,
+    data: Vec<T>,
+}
+
+impl<T> Matrix<T> {
+    pub fn new(rows: usize, cols: usize) -> Matrix<T>
+    where
+        T: Default,
+    {
+        Matrix {
+            rows,
+            cols,
+            data: (0..rows * cols).map(|_| T::default()).collect(),
+        }
+    }
+    pub fn rows(&self) -> usize {
+        self.rows
+    }
+    pub fn cols(&self) -> usize {
+        self.cols
+    }
+    pub fn data(&self) -> &Vec<T> {
+        &self.data
+    }
+    pub fn at(&self, row: usize, col: usize) -> Option<&T> {
+        if row < self.rows && col < self.cols {
+            return Some(&self.data[col + row * self.cols]);
+        }
+        None
+    }
+    pub fn set(&mut self, col: usize, row: usize, t: T) {
+        assert!(row < self.rows && col < self.cols);
+        self.data[col + row * self.cols] = t;
+    }
+}
+
 /// target type for image generation.
-pub type IDMatrix = Vec<Vec<Option<usize>>>;
+pub type IDMatrix = Matrix<Option<usize>>;
 
 /// Representation of a tiled image used in the image processing part of the process.
 pub struct Image {
@@ -105,16 +148,14 @@ impl Image {
     }
     /// Compute a slim "id" matrix representing the original tiled image.
     fn id_matrix(&self) -> IDMatrix {
-        let mut out = Vec::new();
+        let mut out = IDMatrix::new(self.rows as usize, self.cols as usize);
         for i in 0..self.cols {
-            let mut row = Vec::new();
             for j in 0..self.rows {
                 let u = i * self.tile_width;
                 let v = j * self.tile_height;
                 let subimg = imageops::crop_imm(&self.img, u, v, self.tile_width, self.tile_height);
-                row.push(self.tile_id(subimg.to_image()));
+                out.set(i as usize, j as usize, self.tile_id(subimg.to_image()));
             }
-            out.push(row);
         }
         out
     }
@@ -154,9 +195,12 @@ impl Image {
         }
         for i in 0..self.cols {
             for j in 0..self.rows {
-                if let Some(t) = img[i as usize][j as usize] {
+                if let Some(t) = img.at(i as usize, j as usize) {
                     for (nid, h, k) in self.neighbor(i as usize, j as usize) {
-                        mapping[t as usize][nid].insert(img[h][k].unwrap());
+                        // mapping[t][nid].insert(img.at(h, k));
+                        // if let Some(s) = img.at(h, k) {
+                        //     mapping[t as usize][nid].insert(s);
+                        // }
                     }
                 }
             }
@@ -200,17 +244,17 @@ impl TIS {
     }
     /// Use TIS to "decode" an image matrix into an RgbaImage
     pub fn decode(self, image: IDMatrix) -> RgbaImage {
-        let width: u32 = image.len() as u32 * self.data.width;
-        let height: u32 = image[0].len() as u32 * self.data.height;
+        let width: u32 = image.cols() as u32 * self.data.width;
+        let height: u32 = image.rows() as u32 * self.data.height;
         let mut img = RgbaImage::new(width, height);
 
         for i in 0..width / self.data.width {
             for j in 0..height / self.data.height {
                 let x = i * self.data.width;
                 let y = j * self.data.height;
-                if let Some(id) = image[i as usize][j as usize] {
-                    let tile = &self.tiles[id];
-                    overlay(&mut img, tile, i64::from(x), i64::from(y));
+                if let Some(id) = image.at(i as usize, j as usize) {
+                    // let tile = &self.tiles[id];
+                    // overlay(&mut img, tile, i64::from(x), i64::from(y));
                 }
             }
         }
@@ -257,18 +301,13 @@ impl TID {
     /// generate a random image representation
     pub fn rng(&self, mut image: IDMatrix) -> IDMatrix {
         let mut rng = rand::thread_rng();
-        for i in 0..image.len() {
-            for j in 0..image[0].len() {
-                image[i][j] = Some(rng.gen_range(0..=self.n));
+        for i in 0..image.rows() {
+            for j in 0..image.cols() {
+                image.set(i, j, Some(rng.gen_range(0..=self.n)));
             }
         }
         image
     }
-}
-
-/// generate an empty image representation
-pub fn empty(n: usize, m: usize) -> IDMatrix {
-    (0..n).map(|_| (0..m).map(|_| None).collect()).collect()
 }
 
 fn load_tiles(dir: String) -> Vec<RgbaImage> {

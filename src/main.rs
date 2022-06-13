@@ -1,11 +1,9 @@
+mod backtrack;
 mod eugenics;
 mod genetic;
 mod image;
-mod sudoku;
 
-use crate::eugenics::GA;
-use crate::genetic::fitness;
-use crate::image::{empty, load_tis, Image, TID, TIS};
+use crate::image::{load_tis, Image, TID, TIS};
 use clap::{arg, Command};
 
 fn cli() -> Command<'static> {
@@ -57,18 +55,7 @@ fn main() {
             let path = args.value_of("TIS").unwrap();
             match load_tis(path.to_string()) {
                 Some(tis) => {
-                    let mut pool = GA::new(100, 5, 5, &tis.data);
-                    pool.evolve(500);
-                    for (i, img) in pool.id_matrices().into_iter().enumerate() {
-                        tis.clone()
-                            .decode((&img).clone())
-                            .save(format!(
-                                "out/{}_f={}.png",
-                                i,
-                                fitness((&img).clone(), &tis.data)
-                            ))
-                            .ok();
-                    }
+                    // do some inference with tis
                 }
                 None => {}
             }
