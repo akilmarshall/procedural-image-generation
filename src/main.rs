@@ -2,6 +2,7 @@ mod backtrack;
 mod eugenics;
 mod genetic;
 mod image;
+mod matrix;
 
 use crate::image::{load_tis, Image, TID, TIS};
 use clap::{arg, Command};
@@ -43,7 +44,7 @@ fn main() {
                 String::from(&path),
             );
             let mut tid = TID::new();
-            tid.mapping(img.compute_mapping())
+            tid.mapping(img.compute_neighborhoods())
                 .n(img.tiles().len())
                 .width(img.tile_width)
                 .height(img.tile_height);
@@ -54,7 +55,7 @@ fn main() {
         Some(("inference", args)) => {
             let path = args.value_of("TIS").unwrap();
             match load_tis(path.to_string()) {
-                Some(tis) => {
+                Some(_tis) => {
                     // do some inference with tis
                 }
                 None => {}

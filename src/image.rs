@@ -1,3 +1,4 @@
+use crate::matrix::Matrix;
 use image::{imageops, GenericImageView, RgbaImage};
 use imageops::overlay;
 use rand::Rng;
@@ -9,95 +10,7 @@ use std::fs::{read_dir, DirBuilder, File};
 use std::io::Write;
 
 /// A type for directions, TODO: turn into an enum
-pub type direction = usize;
-
-/// Counter object specialized to usize.
-/// Provides an interface to increase and query statistics about the group.
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Counter {
-    n: usize,
-    data: Vec<usize>,
-}
-
-impl Counter {
-    /// New Counter object to track n items.
-    pub fn new(n: usize) -> Self {
-        Counter {
-            n,
-            data: (0..n).map(|_| 0).collect(),
-        }
-    }
-    /// Is i valid with respect to the instance.
-    fn valid(&self, i: usize) -> bool {
-        i < self.n
-    }
-    /// Attempt to insert i into the group.
-    pub fn insert(&mut self, i: usize) {
-        if self.valid(i) {
-            self.data[i] += 1;
-        }
-    }
-    /// What is the population of i?
-    pub fn raw_query(&self, i: usize) -> Option<usize> {
-        if self.valid(i) {
-            return Some(self.data[i]);
-        }
-        None
-    }
-    /// What is the population of the group?
-    fn total(&self) -> usize {
-        self.data.iter().fold(0, |a, b| a + b)
-    }
-    /// What proportion of the group does i represent? Returns in [0, 1).
-    pub fn query(&self, i: usize) -> Option<f32> {
-        if self.valid(i) {
-            let a = self.raw_query(i).unwrap() as f32;
-            let b = self.total() as f32;
-            return Some(a / b);
-        }
-        None
-    }
-}
-
-/// Generic flat matrix
-#[derive(Clone)]
-pub struct Matrix<T> {
-    rows: usize,
-    cols: usize,
-    data: Vec<T>,
-}
-
-impl<T> Matrix<T> {
-    pub fn new(rows: usize, cols: usize) -> Matrix<T>
-    where
-        T: Default,
-    {
-        Matrix {
-            rows,
-            cols,
-            data: (0..rows * cols).map(|_| T::default()).collect(),
-        }
-    }
-    pub fn rows(&self) -> usize {
-        self.rows
-    }
-    pub fn cols(&self) -> usize {
-        self.cols
-    }
-    pub fn data(&self) -> &Vec<T> {
-        &self.data
-    }
-    pub fn at(&self, row: usize, col: usize) -> Option<&T> {
-        if row < self.rows && col < self.cols {
-            return Some(&self.data[col + row * self.cols]);
-        }
-        None
-    }
-    pub fn set(&mut self, col: usize, row: usize, t: T) {
-        assert!(row < self.rows && col < self.cols);
-        self.data[col + row * self.cols] = t;
-    }
-}
+pub type Direction = usize;
 
 /// target type for image generation.
 pub type IDMatrix = Matrix<Option<usize>>;
@@ -181,31 +94,23 @@ impl Image {
     ///           _ 1 _                 
     /// neighbors 2 i 0                 
     /// of i      _ 3 _                 
-    pub fn compute_mapping(&self) -> Vec<Vec<Counter>> {
+    pub fn compute_neighborhoods(&self) -> Vec<Neighborhood> {
         let img = self.id_matrix();
-        let mut mapping = Vec::new();
         let n = self.tiles.len();
-        for _ in 0..n {
-            mapping.push(Vec::from([
-                Counter::new(n),
-                Counter::new(n),
-                Counter::new(n),
-                Counter::new(n),
-            ]));
-        }
+        let mut neighborhoods: Vec<Neighborhood> = (0..n).map(|_| Neighborhood::new()).collect();
+        // scan the image tile by tile and process it's neighbors
         for i in 0..self.cols {
             for j in 0..self.rows {
                 if let Some(t) = img.at(i as usize, j as usize) {
-                    for (nid, h, k) in self.neighbor(i as usize, j as usize) {
-                        // mapping[t][nid].insert(img.at(h, k));
-                        // if let Some(s) = img.at(h, k) {
-                        //     mapping[t as usize][nid].insert(s);
-                        // }
+                    for (d, h, k) in self.neighbor(i as usize, j as usize) {
+                        if let Some(n) = img.at(h, k) {
+                            neighborhoods[*t].insert(*n, d);
+                        }
                     }
                 }
             }
         }
-        mapping
+        neighborhoods
     }
     pub fn tiles(&self) -> &Vec<RgbaImage> {
         &self.tiles
@@ -253,12 +158,38 @@ impl TIS {
                 let x = i * self.data.width;
                 let y = j * self.data.height;
                 if let Some(id) = image.at(i as usize, j as usize) {
-                    // let tile = &self.tiles[id];
-                    // overlay(&mut img, tile, i64::from(x), i64::from(y));
+                    let tile = &self.tiles[*id];
+                    overlay(&mut img, tile, i64::from(x), i64::from(y));
                 }
             }
         }
         img
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Neighborhood {
+    neighbors: [HashSet<usize>; 4],
+}
+
+impl Neighborhood {
+    pub fn new() -> Self {
+        Neighborhood {
+            neighbors: [
+                HashSet::new(),
+                HashSet::new(),
+                HashSet::new(),
+                HashSet::new(),
+            ],
+        }
+    }
+    pub fn insert(&mut self, u: usize, d: Direction) {
+        if d < 4 {
+            self.neighbors[d].insert(u);
+        }
+    }
+    pub fn N(&self, d: Direction) -> HashSet<usize> {
+        self.neighbors[d].clone()
     }
 }
 
@@ -267,7 +198,7 @@ impl TIS {
 /// Employs builder methods.
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TID {
-    pub mapping: Vec<Vec<Counter>>,
+    neighborhoods: Vec<Neighborhood>,
     pub n: usize,
     pub width: u32,
     pub height: u32,
@@ -276,14 +207,14 @@ pub struct TID {
 impl TID {
     pub fn new() -> Self {
         TID {
-            mapping: Vec::new(),
+            neighborhoods: Vec::new(),
             n: 0,
             width: 0,
             height: 0,
         }
     }
-    pub fn mapping(&mut self, mapping: Vec<Vec<Counter>>) -> &mut Self {
-        self.mapping = mapping;
+    pub fn mapping(&mut self, neighborhoods: Vec<Neighborhood>) -> &mut Self {
+        self.neighborhoods = neighborhoods;
         self
     }
     pub fn n(&mut self, n: usize) -> &mut Self {
@@ -307,6 +238,11 @@ impl TID {
             }
         }
         image
+    }
+    /// Neighbor function
+    /// return a vector of the directional neighbors of t
+    pub fn N(&self, t: usize, d: Direction) -> HashSet<usize> {
+        self.neighborhoods[t].N(d)
     }
 }
 

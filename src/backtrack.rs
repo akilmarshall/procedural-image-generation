@@ -1,7 +1,8 @@
 //! This module implements contrainted backracking search to generate a large number of images from
 //! a seed image, empty or partially complete.
 
-use crate::image::{direction, IDMatrix, Matrix, TID};
+use crate::image::{Direction, IDMatrix, TID};
+use crate::matrix::Matrix;
 use priority_queue::PriorityQueue;
 use std::collections::HashSet;
 
@@ -11,7 +12,7 @@ use std::collections::HashSet;
 pub type Node = Matrix<HashSet<usize>>;
 
 impl Node {
-    pub fn from_IDMatrix(i: IDMatrix) -> Node {
+    pub fn from_idmatrix(i: IDMatrix) -> Node {
         Node {
             rows: i.rows(),
             cols: i.cols(),
@@ -65,7 +66,7 @@ impl Node {
         }
         out
     }
-    pub fn neighbors(&self, x: usize, y: usize) -> Vec<(direction, usize, usize)> {
+    pub fn neighbors(&self, x: usize, y: usize) -> Vec<(Direction, usize, usize)> {
         let mut out = Vec::new();
         // if let N = self.at(x + 1, y) {}
         out
