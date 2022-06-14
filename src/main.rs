@@ -4,6 +4,7 @@ mod genetic;
 mod image;
 mod matrix;
 
+use crate::backtrack::{backtrack_search, Node};
 use crate::image::{load_tis, Image, TID, TIS};
 use clap::{arg, Command};
 
@@ -55,8 +56,15 @@ fn main() {
         Some(("inference", args)) => {
             let path = args.value_of("TIS").unwrap();
             match load_tis(path.to_string()) {
-                Some(_tis) => {
+                Some(tis) => {
                     // do some inference with tis
+                    let seed = Node::empty(3, 3, tis.data.n);
+                    for (i, gimg) in backtrack_search(seed, tis.data.clone())
+                        .into_iter()
+                        .enumerate()
+                    {
+                        tis.decode(gimg).save(format!("out/{}.png", i)).ok();
+                    }
                 }
                 None => {}
             }
