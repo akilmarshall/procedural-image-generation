@@ -36,3 +36,25 @@ impl<T> Matrix<T> {
         self.data[col + row * self.cols] = t;
     }
 }
+
+/// Return a list of neighbors to (x, y)
+pub trait Neighbors {
+    fn rows(&self) -> usize;
+    fn cols(&self) -> usize;
+    fn neighbors(&self, x: usize, y: usize) -> Vec<(usize, usize, usize)> {
+        let mut out = Vec::new();
+        if x < (self.cols() - 1) {
+            out.push((0, x + 1, y));
+        }
+        if y > 1 {
+            out.push((1, x, y - 1));
+        }
+        if x > 1 {
+            out.push((2, x - 1, y));
+        }
+        if y < (self.rows() - 1) {
+            out.push((3, x, y + 1));
+        }
+        out
+    }
+}
