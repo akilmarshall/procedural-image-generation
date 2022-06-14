@@ -1,4 +1,4 @@
-use crate::matrix::Matrix;
+use crate::matrix::{Matrix, Neighbors};
 use image::{imageops, GenericImageView, RgbaImage};
 use imageops::overlay;
 use rand::Rng;
@@ -23,6 +23,15 @@ pub struct Image {
     cols: u32,
     img: RgbaImage,
     tiles: Vec<RgbaImage>,
+}
+
+impl Neighbors for Image {
+    fn rows(&self) -> usize {
+        self.rows as usize
+    }
+    fn cols(&self) -> usize {
+        self.rows as usize
+    }
 }
 
 impl Image {
@@ -72,23 +81,6 @@ impl Image {
         }
         out
     }
-    /// Return a list of neighbors to (x, y)
-    fn neighbor(&self, x: usize, y: usize) -> Vec<(usize, usize, usize)> {
-        let mut out = Vec::new();
-        if x < (self.cols - 1) as usize {
-            out.push((0, x + 1, y));
-        }
-        if y > 1 {
-            out.push((1, x, y - 1));
-        }
-        if x > 1 {
-            out.push((2, x - 1, y));
-        }
-        if y < (self.rows - 1) as usize {
-            out.push((3, x, y + 1));
-        }
-        out
-    }
     /// Compute/Return the neighbor mapping for the tiled image.
     /// tileid -> (neighbor -> [tileid])
     ///           _ 1 _                 
@@ -102,7 +94,7 @@ impl Image {
         for i in 0..self.cols {
             for j in 0..self.rows {
                 if let Some(t) = img.at(i as usize, j as usize) {
-                    for (d, h, k) in self.neighbor(i as usize, j as usize) {
+                    for (d, h, k) in self.neighbors(i as usize, j as usize) {
                         if let Some(n) = img.at(h, k) {
                             neighborhoods[*t].insert(*n, d);
                         }
@@ -148,7 +140,7 @@ impl TIS {
         }
     }
     /// Use TIS to "decode" an image matrix into an RgbaImage
-    pub fn decode(self, image: IDMatrix) -> RgbaImage {
+    pub fn decode(&self, image: IDMatrix) -> RgbaImage {
         let width: u32 = image.cols() as u32 * self.data.width;
         let height: u32 = image.rows() as u32 * self.data.height;
         let mut img = RgbaImage::new(width, height);
