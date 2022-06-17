@@ -96,7 +96,7 @@ impl Image {
                 if let Some(t) = img.at(i as usize, j as usize) {
                     for (d, h, k) in self.neighbors(i as usize, j as usize) {
                         if let Some(n) = img.at(h, k) {
-                            neighborhoods[*t].insert(*n, d);
+                            neighborhoods[t].insert(n, d);
                         }
                     }
                 }
@@ -150,7 +150,7 @@ impl TIS {
                 let x = i * self.data.width;
                 let y = j * self.data.height;
                 if let Some(id) = image.at(i as usize, j as usize) {
-                    let tile = &self.tiles[*id];
+                    let tile = &self.tiles[id];
                     overlay(&mut img, tile, i64::from(x), i64::from(y));
                 }
             }
