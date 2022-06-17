@@ -12,6 +12,12 @@ pub enum Tile {
     These(Vec<usize>),
 }
 
+impl Default for Tile {
+    fn default() -> Self {
+        Tile::This(None)
+    }
+}
+
 /// A partially collapsed image. A graph with the nodes as "partially realized images" and edges
 /// are "set" and "unset" operations on a tile in the image, i.e. nodes separated by one edge
 /// differ at one tile.
@@ -23,6 +29,18 @@ impl Neighbors for Node {
     }
     fn cols(&self) -> usize {
         self.cols()
+    }
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn neighborhood() {
+        let a = Node::new(1, 2);
+        assert_eq!(a.neighbors(0, 0).len(), 1);
+        assert_eq!(a.neighbors(0, 1).len(), 1);
+        let b = Node::new(1, 3);
+        assert_eq!(b.neighbors(0, 1).len(), 2);
     }
 }
 
@@ -37,11 +55,11 @@ impl Node {
     // }
     // }
     /// Construct an uncollapsed image with t options for every position
-    pub fn empty(rows: usize, cols: usize, t: usize) -> Self {
+    pub fn empty(cols: usize, rows: usize, t: usize) -> Self {
         Node {
             rows,
             cols,
-            data: (0..rows * cols)
+            data: (0..cols * rows)
                 .map(|_| Tile::These((0..t).collect()))
                 .collect(),
         }
@@ -68,8 +86,8 @@ impl Node {
         let mut out: Option<(usize, usize)> = None;
         let mut min: Option<usize> = None;
         for (i, d) in self.data().iter().enumerate() {
-            let x: usize = i / self.cols();
-            let y: usize = i % self.cols();
+            let x: usize = i % self.cols();
+            let y: usize = i / self.cols();
             if let Tile::These(neighbors) = d {
                 match min {
                     None => {
@@ -102,12 +120,12 @@ impl Node {
     }
 
     pub fn to_idmatrix(&self) -> IDMatrix {
-        let mut id_matrix = IDMatrix::new(self.rows, self.cols);
-        for i in 0..self.rows {
-            for j in 0..self.cols {
+        let mut id_matrix = IDMatrix::new(self.cols, self.rows);
+        for i in 0..self.cols {
+            for j in 0..self.rows {
                 match self.at(i, j) {
                     Tile::This(Some(t)) => {
-                        id_matrix.set(i, j, Some(*t));
+                        id_matrix.set(i, j, Some(t));
                     }
                     Tile::This(None) | Tile::These(_) => {
                         id_matrix.set(i, j, None);
@@ -119,10 +137,10 @@ impl Node {
     }
 }
 
-fn intersection(A: Vec<usize>, B: HashSet<usize>) -> Vec<usize> {
+fn intersection(as_: Vec<usize>, bs: HashSet<usize>) -> Vec<usize> {
     let mut out = Vec::new();
-    for a in A {
-        if B.contains(&a) {
+    for a in as_ {
+        if bs.contains(&a) {
             out.push(a);
         }
     }
@@ -141,7 +159,7 @@ pub fn backtrack_search(seed: Node, tis: TID) -> Vec<IDMatrix> {
                     Tile::These(tiles) => {
                         for t in tiles {
                             let mut fork = img.clone();
-                            fork.collapse(x, y, *t, &tis);
+                            fork.collapse(x, y, t, &tis);
                             if fork.complete() {
                                 out.push(fork.to_idmatrix())
                             } else {
