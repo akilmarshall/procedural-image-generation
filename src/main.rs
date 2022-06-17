@@ -4,8 +4,9 @@ mod genetic;
 mod image;
 mod matrix;
 
-use crate::backtrack::{backtrack_search, Node};
+use crate::backtrack::{backtrack_search, Node, Tile};
 use crate::image::{load_tis, Image, TID, TIS};
+use crate::matrix::{Matrix, Neighbors};
 use clap::{arg, Command};
 
 fn cli() -> Command<'static> {
@@ -29,7 +30,7 @@ fn cli() -> Command<'static> {
         .subcommand(
             Command::new("inference")
                 .about("Use Tiled Image Statistics to generate new images.")
-                .args(&[arg!(<TIS> "coming soon")])
+                .args(&[arg!(<TIS> "TIS"), arg!(<COL> "columns"), arg!(<ROW> "rows")])
                 .arg_required_else_help(true),
         )
 }
@@ -55,10 +56,14 @@ fn main() {
         }
         Some(("inference", args)) => {
             let path = args.value_of("TIS").unwrap();
+            let rows = args.value_of("ROW").unwrap().parse::<usize>().unwrap();
+            let cols = args.value_of("COL").unwrap().parse::<usize>().unwrap();
             match load_tis(path.to_string()) {
                 Some(tis) => {
                     // do some inference with tis
-                    let seed = Node::empty(3, 3, tis.data.n);
+                    let seed = Node::empty(cols, rows, tis.data.n);
+                    // seed.set(0, 0, Tile::This(Some(1)));
+                    // tis.decode(seed.to_idmatrix()).save("blank.png").ok();
                     for (i, gimg) in backtrack_search(seed, tis.data.clone())
                         .into_iter()
                         .enumerate()
@@ -73,3 +78,16 @@ fn main() {
         _ => { /* catch all do nothing */ }
     }
 }
+// impl Neighbors for Matrix<usize> {
+//     fn rows(&self) -> usize {
+//         self.rows()
+//     }
+//     fn cols(&self) -> usize {
+//         self.cols()
+//     }
+// }
+// fn main() {
+//     let mut m = Matrix::<usize>::new(3, 1);
+//     println!("{:?}", m.data);
+//     println!("{:?}", m.neighbors(1, 0));
+// }
