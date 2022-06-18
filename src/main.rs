@@ -1,13 +1,10 @@
-mod eugenics;
-mod genetic;
 mod image;
-mod matrix;
-mod node;
-mod procedure;
+mod procedures;
+mod structures;
 
 use crate::image::{load_tis, Image, TID, TIS};
-use crate::node::Node;
-use crate::procedure::backtrack_search;
+use crate::procedures::backtrack::search;
+use crate::structures::node::Node;
 use clap::{arg, Command};
 
 fn cli() -> Command<'static> {
@@ -63,12 +60,7 @@ fn main() {
                 Some(tis) => {
                     // do some inference with tis
                     let seed = Node::empty(cols, rows, tis.data.n);
-                    // seed.set(0, 0, Tile::This(Some(1)));
-                    // tis.decode(seed.to_idmatrix()).save("blank.png").ok();
-                    for (i, gimg) in backtrack_search(seed, tis.data.clone())
-                        .into_iter()
-                        .enumerate()
-                    {
+                    for (i, gimg) in search(seed, tis.data.clone()).into_iter().enumerate() {
                         tis.decode(gimg).save(format!("out/{}.png", i)).ok();
                     }
                 }

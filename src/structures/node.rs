@@ -1,5 +1,5 @@
 use crate::image::{IDMatrix, TID};
-use crate::matrix::{Matrix, Neighbors};
+use crate::structures::matrix::{Matrix, Neighbors};
 use std::collections::HashSet;
 
 #[derive(Debug, Clone, Eq, PartialEq)]

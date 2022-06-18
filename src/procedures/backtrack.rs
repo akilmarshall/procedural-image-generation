@@ -2,10 +2,10 @@
 //! a seed image, empty or partially complete.
 
 use crate::image::{IDMatrix, TID};
-use crate::node::{Node, Tile};
+use crate::structures::node::{Node, Tile};
 use std::collections::VecDeque;
 
-pub fn backtrack_search(seed: Node, tis: TID) -> Vec<IDMatrix> {
+pub fn search(seed: Node, tis: TID) -> Vec<IDMatrix> {
     let mut out: Vec<IDMatrix> = Vec::new();
     let mut active = VecDeque::from([seed]);
     while !active.is_empty() {

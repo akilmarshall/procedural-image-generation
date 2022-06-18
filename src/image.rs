@@ -1,4 +1,4 @@
-use crate::matrix::{Matrix, Neighbors};
+use crate::structures::matrix::{Matrix, Neighbors};
 use image::{imageops, GenericImageView, RgbaImage};
 use imageops::overlay;
 use rand::Rng;
