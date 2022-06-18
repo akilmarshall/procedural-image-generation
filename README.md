@@ -201,29 +201,48 @@ t_0 \\ t_1 \\ t_2
 #### CENTERX
 
 ```math
-CENTERX=
+CENTERX
+\langle
 \begin{bmatrix}
-t_0&B=\mathcal{N}(t_0, 0)\cap\mathcal{N}(a, 1) \\ t_1&A=\mathcal{N}(t_1, 0) \\ t_2&C=\mathcal{N}(t_2, 0)\cap\mathcal{N}(a, 3)
+    t_0 \\ t_1 \\ t_2
+\end{bmatrix}
+\rangle=
+\begin{bmatrix}
+    B=\mathcal{N}(t_0, 0)\cap\mathcal{N}(a, 1)\\
+    A=\mathcal{N}(t_1, 0) \\ 
+    C=\mathcal{N}(t_2, 0)\cap\mathcal{N}(a, 3)
 \end{bmatrix}
 ```
 
 #### CORNERX
 
 ```math
-CORNERX=
+CORNERX
+\langle
 \begin{bmatrix}
-t_0&A=\mathcal{N}(t_0, 0) \\
-t_1&B=\mathcal{N}(t_1, 0)\cap\mathcal{N}(a, 3) \\
-t_2&C=\mathcal{N}(t_2, 0)\cap\mathcal{N}(b, 3)
+    t_0 \\ t_1 \\ t_2
+\end{bmatrix}
+\rangle
+=
+\begin{bmatrix}
+    A=\mathcal{N}(t_0, 0) \\
+    B=\mathcal{N}(t_1, 0)\cap\mathcal{N}(a, 3) \\
+    C=\mathcal{N}(t_2, 0)\cap\mathcal{N}(b, 3)
 \end{bmatrix}
 ```
 
 ```math
-CORNERX\approx
+\overbar{CORNERX}
+\langle
 \begin{bmatrix}
-t_0&C=\mathcal{N}(t_0, 0)\cap\mathcal{N}(b, 1) \\
-t_1&B=\mathcal{N}(t_1, 0)\cap\mathcal{N}(a, 1) \\
-t_2&A=\mathcal{N}(t_2, 0)
+    t_0 \\ t_1 \\ t_2
+\end{bmatrix}
+\rangle
+=
+\begin{bmatrix}
+C=\mathcal{N}(t_0, 0)\cap\mathcal{N}(b, 1) \\
+B=\mathcal{N}(t_1, 0)\cap\mathcal{N}(a, 1) \\
+A=\mathcal{N}(t_2, 0)
 \end{bmatrix}
 ```
 
