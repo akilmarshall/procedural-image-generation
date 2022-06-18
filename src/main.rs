@@ -1,5 +1,4 @@
 mod eugenics;
-mod fragment;
 mod genetic;
 mod image;
 mod matrix;
