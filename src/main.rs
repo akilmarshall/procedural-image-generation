@@ -1,12 +1,14 @@
-mod backtrack;
 mod eugenics;
+mod fragment;
 mod genetic;
 mod image;
 mod matrix;
+mod node;
+mod procedure;
 
-use crate::backtrack::{backtrack_search, Node, Tile};
 use crate::image::{load_tis, Image, TID, TIS};
-use crate::matrix::{Matrix, Neighbors};
+use crate::node::Node;
+use crate::procedure::backtrack_search;
 use clap::{arg, Command};
 
 fn cli() -> Command<'static> {
