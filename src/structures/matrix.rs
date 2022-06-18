@@ -1,6 +1,7 @@
+//! Defines a generic 2D matrix and a Neighbors trait for lattices.
 use serde::{Deserialize, Serialize};
 
-/// Generic 2D  matrix
+/// Generic 2D  matrix. Flat internal representation.
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Matrix<T> {
     pub rows: usize,
@@ -9,6 +10,7 @@ pub struct Matrix<T> {
 }
 
 impl<T> Matrix<T> {
+    /// Create a new matrix (cols x rows) of T.
     pub fn new(cols: usize, rows: usize) -> Matrix<T>
     where
         T: Default,
@@ -19,20 +21,26 @@ impl<T> Matrix<T> {
             data: (0..rows * cols).map(|_| T::default()).collect(),
         }
     }
+    /// internal indexing function for mapping 2d queries into the internal
+    /// linear memory space.
     fn index(&self, col: usize, row: usize) -> usize {
-        // assert!(row < self.rows());
-        // assert!(col < self.cols());
+        assert!(row < self.rows());
+        assert!(col < self.cols());
         col + row * self.cols()
     }
+    /// Return the number of rows the matrix has.
     pub fn rows(&self) -> usize {
         self.rows
     }
+    /// Return the number of columns the matrix has.
     pub fn cols(&self) -> usize {
         self.cols
     }
+    /// Return a reference to the flat memory representation of the matrix data.
     pub fn data(&self) -> &Vec<T> {
         &self.data
     }
+    /// Query the matrix at [col, row].
     pub fn at(&self, col: usize, row: usize) -> T
     where
         T: Clone,
@@ -48,11 +56,11 @@ impl<T> Matrix<T> {
 
 /// Return a list of neighbors to (x, y)
 pub trait Neighbors {
-    fn rows(&self) -> usize;
-    fn cols(&self) -> usize;
+    fn shape(&self) -> (usize, usize);
     fn neighbors(&self, x: usize, y: usize) -> Vec<(usize, usize, usize)> {
+        let (cols, rows) = self.shape();
         let mut out = Vec::new();
-        if x < self.cols() - 1 {
+        if x < cols - 1 {
             out.push((0, x + 1, y));
         }
         if y > 0 {
@@ -61,10 +69,16 @@ pub trait Neighbors {
         if x > 0 {
             out.push((2, x - 1, y));
         }
-        if y < self.rows() - 1 {
+        if y < rows - 1 {
             out.push((3, x, y + 1));
         }
         out
+    }
+}
+
+impl<T> Neighbors for Matrix<T> {
+    fn shape(&self) -> (usize, usize) {
+        (self.cols(), self.rows())
     }
 }
 

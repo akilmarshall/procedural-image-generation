@@ -1,3 +1,5 @@
+//! A data structure for representing partially or completely defined images, each tile may be
+//! undefined, defined, or a defined as several competing options.
 use crate::image::{IDMatrix, TID};
 use crate::structures::matrix::{Matrix, Neighbors};
 use std::collections::HashSet;
@@ -19,15 +21,6 @@ impl Default for Tile {
 /// differ at one tile.
 pub type Node = Matrix<Tile>;
 
-impl Neighbors for Node {
-    fn rows(&self) -> usize {
-        self.rows()
-    }
-    fn cols(&self) -> usize {
-        self.cols()
-    }
-}
-
 impl Node {
     // pub fn from_idmatrix(i: IDMatrix) -> Node {
     // when importing from idmatrix if only some positions are defined their undefined
@@ -48,7 +41,8 @@ impl Node {
                 .collect(),
         }
     }
-    /// Return true if the node is fully collapsed, i.e. each set contains 1 or fewer members
+    /// Return true if the node is fully collapsed, i.e. each position is Tile::This(None) or
+    /// Tile::This(Some(_)).
     pub fn complete(&self) -> bool {
         for d in self.data() {
             if let Tile::These(_) = d {
@@ -57,7 +51,7 @@ impl Node {
         }
         true
     }
-    /// Return true if each member in self.data contains exactly 1 item
+    /// Return true if the node is fully defined, i.e. each position is Tile::This(Some(_)).
     pub fn good(&self) -> bool {
         for d in self.data() {
             match d {
@@ -68,6 +62,9 @@ impl Node {
         }
         true
     }
+    /// Returns the position with the fewest options to choose from, i.e. for each tile in
+    /// self.data for each that is Tile::These(v), return the first position with the smallest
+    /// v.len() otherwise None.
     pub fn min_choices(&self) -> Option<(usize, usize)> {
         let mut out: Option<(usize, usize)> = None;
         let mut min: Option<usize> = None;
@@ -91,6 +88,7 @@ impl Node {
         }
         out
     }
+    /// Set (x, y) to t and propogate the consequences according to the neighbor function.
     pub fn collapse(&mut self, x: usize, y: usize, t: usize, tid: &TID) {
         self.set(x, y, Tile::This(Some(t)));
         for (d, h, k) in self.neighbors(x, y) {
@@ -101,6 +99,7 @@ impl Node {
         }
     }
 
+    /// Compute an IDMatrix representation.
     pub fn to_idmatrix(&self) -> IDMatrix {
         let mut id_matrix = IDMatrix::new(self.cols, self.rows);
         for i in 0..self.cols {
@@ -119,6 +118,8 @@ impl Node {
     }
 }
 
+/// Specialized function to compute the result of the intersection of a Vec<Tile> and
+/// HashSet<Tile> as a Tile enum.
 fn intersection(as_: Vec<usize>, bs: HashSet<usize>) -> Tile {
     let mut ts = Vec::new();
     for a in as_ {

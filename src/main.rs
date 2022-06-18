@@ -71,16 +71,3 @@ fn main() {
         _ => { /* catch all do nothing */ }
     }
 }
-// impl Neighbors for Matrix<usize> {
-//     fn rows(&self) -> usize {
-//         self.rows()
-//     }
-//     fn cols(&self) -> usize {
-//         self.cols()
-//     }
-// }
-// fn main() {
-//     let mut m = Matrix::<usize>::new(3, 1);
-//     println!("{:?}", m.data);
-//     println!("{:?}", m.neighbors(1, 0));
-// }

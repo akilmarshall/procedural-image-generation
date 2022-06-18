@@ -1,3 +1,5 @@
+//! Image processing, contains structures and functions concerned with the ingest of processing of
+//! images into structred data for image generation.
 use crate::structures::matrix::{Matrix, Neighbors};
 use image::{imageops, GenericImageView, RgbaImage};
 use imageops::overlay;
@@ -26,11 +28,8 @@ pub struct Image {
 }
 
 impl Neighbors for Image {
-    fn rows(&self) -> usize {
-        self.rows as usize
-    }
-    fn cols(&self) -> usize {
-        self.rows as usize
+    fn shape(&self) -> (usize, usize) {
+        (self.cols as usize, self.rows as usize)
     }
 }
 
