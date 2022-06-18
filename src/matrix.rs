@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Generic 2D  matrix
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
 pub struct Matrix<T> {
     pub rows: usize,
     pub cols: usize,
