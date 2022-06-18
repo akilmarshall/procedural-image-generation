@@ -51,7 +51,7 @@ $$
 
 #### CENTER
 
-Fix $\left1, 1\right$ in $\mathcal{F}$ with $t\_i$
+Fix $\left( 1, 1\right)$ in $\mathcal{F}$ with $t\_i$
 
 $$
     \mathcal{F}\_{(1, 1, t\_i)}=
