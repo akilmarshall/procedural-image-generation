@@ -3,7 +3,7 @@
 How can I turn a single image into more images that are somewhat like it?
 
 
-(you need [xhub](https://chrome.google.com/webstore/detail/xhub/anidddebgkllnnnnjfkmjcaallemhjee)
+(you need [xhub](https://github.com/nschloe/xhub)
 extension to view the math, maybe it won't be a pain in the ass to write it
 natively in the README one day...)
 
