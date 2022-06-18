@@ -17,7 +17,7 @@ also known as a **tile set**.
 `$\mathbb{T}$` denotes the tile sheet of `$\mathbb{I}$`,
 
 ```math
-    \mathbb{T} = \{t_1, t_2, \cdots{}, t_n\}
+\mathbb{T} = \{t_1, t_2, \cdots{}, t_n\}
 ```
 each tile set `$\mathbb{T}$` contains `$n$` items each denoted `$t_i$` where
 `$1\leq i \leq n$`.
@@ -26,7 +26,7 @@ each tile set `$\mathbb{T}$` contains `$n$` items each denoted `$t_i$` where
 Each image `$\mathbb{I}$` also has an associated **neighbor** function,
 
 ```math
-    \mathcal{N}_{\mathbb{I}}::t\to d\to \[t\],
+    \mathcal{N}_{\mathbb{I}}::t\to d\to \left[t\right],
 ```
 
 ![Example of the neighbor function](https://imgur.com/8reI0hs.png)
@@ -74,7 +74,7 @@ Fix `$\left(1, 1\right)$` in `$\mathcal{F}$` with `$t_i$`
 The `$CENTER$` algorithm expands a fragment of the form `$\mathcal{F}_{(1, 1, t)}$`
 
 ```math
-    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle={\left\lbrack
+    CENTER\langle\mathcal{F}_{(1, 1, t)}\rangle=
     \begin{bmatrix}
     G=\mathcal{N}(c, 1)\cap \mathcal{N}(b, 2)  & B=\mathcal{N}(t,1) & F=\mathcal{N}(b, 0)\cap \mathcal{N}(a, 1) \\
     C=\mathcal{N}(t,2) & t & A=\mathcal{N}(t,0) \\
@@ -176,7 +176,7 @@ Considering a fragment member how can it's edge's be expanded?
 ```math
    \mathcal{F}=
    \begin{bmatrix}
-   & & & &\\ & a & b & c & \\ & d & e & f & \\ & h & i & j & \\ & & & &} \right\rbrack}
+   & & & &\\ & a & b & c & \\ & d & e & f & \\ & h & i & j & \\ & & & &
    \end{bmatrix}
 ```
 
@@ -192,7 +192,7 @@ of
 ```math
 \begin{bmatrix}
 t_0 \\ t_1 \\ t_2
-\end{bmatrx}
+\end{bmatrix}
 
 ```
 
