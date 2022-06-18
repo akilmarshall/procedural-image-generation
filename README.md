@@ -51,12 +51,16 @@ $$
 
 #### CENTER
 
-Fix <img src="https://render.githubusercontent.com/render/math?math=(1, 1)\text{ in }\mathcal{F}\text{ with }t_i">
+Fix `$\left(1, 1\right)$` in `$\mathcal{F}$` with `$t\_i$`
 
-$$
+```math
     \mathcal{F}\_{(1, 1, t\_i)}=
-    {\left\lbrack \matrix{  &   &   \cr   & t\_i &   \cr   &   &  } \right\rbrack}
-$$
+    \begin{bmatrix}
+    & & \\
+    & t_i & \\
+    & &
+    \end{bmatrix}
+```
 
 The $CENTER$ algorithm expands a fragment of the form $\mathcal{F}\_{(1, 1, t)}$
 
