@@ -159,9 +159,11 @@ impl TIS {
     }
 }
 
+type Hood = [HashSet<usize>; 4];
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Neighborhood {
-    neighbors: [HashSet<usize>; 4],
+    neighbors: Hood,
 }
 
 impl Neighborhood {
@@ -175,12 +177,17 @@ impl Neighborhood {
             ],
         }
     }
+    /// Builder syntax to quickly define the neighborhood
+    pub fn neighbors(&mut self, neighbors: Hood) -> &mut Self {
+        self.neighbors = neighbors;
+        self
+    }
     pub fn insert(&mut self, u: usize, d: Direction) {
         if d < 4 {
             self.neighbors[d].insert(u);
         }
     }
-    pub fn N(&self, d: Direction) -> HashSet<usize> {
+    pub fn neighborhood(&self, d: Direction) -> HashSet<usize> {
         self.neighbors[d].clone()
     }
 }
@@ -231,10 +238,10 @@ impl TID {
         }
         image
     }
-    /// Neighbor function
-    /// return a vector of the directional neighbors of t
-    pub fn N(&self, t: usize, d: Direction) -> HashSet<usize> {
-        self.neighborhoods[t].N(d)
+    /// Neighborhood function
+    /// return a HashSet of the directional neighbors of t
+    pub fn neighborhood(&self, t: usize, d: Direction) -> HashSet<usize> {
+        self.neighborhoods[t].neighborhood(d)
     }
 }
 
