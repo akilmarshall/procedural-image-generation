@@ -232,7 +232,7 @@ CORNERX
 ```
 
 ```math
-\overbar{CORNERX}
+\overline{CORNERX}
 \langle
 \begin{bmatrix}
     t_0 \\ t_1 \\ t_2
