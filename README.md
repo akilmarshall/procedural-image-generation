@@ -51,7 +51,7 @@ $$
 
 #### CENTER
 
-Fix $\left( 1, 1\right)$ in $\mathcal{F}$ with $t\_i$
+Fix <img src="https://render.githubusercontent.com/render/math?math=(1, 1)"> in <img src="https://render.githubusercontent.com/render/math?math=\mathcal{F}"> with <img src="https://render.githubusercontent.com/render/math?math=t_i">
 
 $$
     \mathcal{F}\_{(1, 1, t\_i)}=
