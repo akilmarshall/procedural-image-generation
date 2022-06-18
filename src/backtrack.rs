@@ -1,12 +1,12 @@
 //! This module implements contrainted backracking search to generate a large number of images from
 //! a seed image, empty or partially complete.
 
-use crate::image::{Direction, IDMatrix, TID};
+use crate::image::{Direction, IDMatrix, Neighborhood, TID};
 use crate::matrix::{Matrix, Neighbors};
 use priority_queue::PriorityQueue;
 use std::collections::{HashSet, VecDeque};
 
-#[derive(Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Tile {
     This(Option<usize>),
     These(Vec<usize>),
@@ -29,18 +29,6 @@ impl Neighbors for Node {
     }
     fn cols(&self) -> usize {
         self.cols()
-    }
-}
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn neighborhood() {
-        let a = Node::new(1, 2);
-        assert_eq!(a.neighbors(0, 0).len(), 1);
-        assert_eq!(a.neighbors(0, 1).len(), 1);
-        let b = Node::new(1, 3);
-        assert_eq!(b.neighbors(0, 1).len(), 2);
     }
 }
 
@@ -76,8 +64,10 @@ impl Node {
     /// Return true if each member in self.data contains exactly 1 item
     pub fn good(&self) -> bool {
         for d in self.data() {
-            if let Tile::These(_) = d {
-                return false;
+            match d {
+                Tile::This(None) => return false,
+                Tile::These(_) => return false,
+                _ => {}
             }
         }
         true
@@ -109,12 +99,8 @@ impl Node {
         self.set(x, y, Tile::This(Some(t)));
         for (d, h, k) in self.neighbors(x, y) {
             if let Tile::These(neighbors) = self.at(h, k) {
-                let mut T: Vec<usize> = intersection(neighbors.to_vec(), tid.N(t, d));
-                match T.len() {
-                    0 => self.set(h, k, Tile::This(None)),
-                    1 => self.set(h, k, Tile::This(T.pop())),
-                    _ => self.set(h, k, Tile::These(T)),
-                }
+                let ts = intersection(neighbors.to_vec(), tid.neighborhood(t, d));
+                self.set(h, k, ts);
             }
         }
     }
@@ -137,14 +123,18 @@ impl Node {
     }
 }
 
-fn intersection(as_: Vec<usize>, bs: HashSet<usize>) -> Vec<usize> {
-    let mut out = Vec::new();
+fn intersection(as_: Vec<usize>, bs: HashSet<usize>) -> Tile {
+    let mut ts = Vec::new();
     for a in as_ {
         if bs.contains(&a) {
-            out.push(a);
+            ts.push(a);
         }
     }
-    out
+    match ts.len() {
+        0 => return Tile::This(None),
+        1 => return Tile::This(ts.pop()),
+        _ => return Tile::These(ts),
+    }
 }
 
 pub fn backtrack_search(seed: Node, tis: TID) -> Vec<IDMatrix> {
@@ -172,4 +162,127 @@ pub fn backtrack_search(seed: Node, tis: TID) -> Vec<IDMatrix> {
         }
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn neighborhood() {
+        let a = Node::new(1, 2);
+        assert_eq!(a.neighbors(0, 0).len(), 1);
+        assert_eq!(a.neighbors(0, 1).len(), 1);
+        let b = Node::new(1, 3);
+        assert_eq!(b.neighbors(0, 1).len(), 2);
+        let c = Node::new(3, 3);
+        assert_eq!(c.neighbors(0, 0).len(), 2);
+        assert_eq!(c.neighbors(0, 1).len(), 3);
+        assert_eq!(c.neighbors(1, 1).len(), 4);
+    }
+    #[test]
+    fn node_empty() {
+        let n = 5;
+        let a = Node::empty(1, 1, n);
+        let b = Node::empty(1, 2, n);
+        let c = Node::empty(2, 1, n);
+        let d = Node::empty(1, 3, n);
+        let e = Node::empty(3, 1, n);
+        let f = Node::empty(2, 2, n);
+        let x = Tile::These((0..n).collect());
+        assert_eq!(a.data, vec![x.clone()]);
+        assert_eq!(b.data, vec![x.clone(), x.clone()]);
+        assert_eq!(c.data, vec![x.clone(), x.clone()]);
+        assert_eq!(d.data, vec![x.clone(), x.clone(), x.clone()]);
+        assert_eq!(e.data, vec![x.clone(), x.clone(), x.clone()]);
+        assert_eq!(f.data, vec![x.clone(), x.clone(), x.clone(), x.clone()]);
+    }
+    #[test]
+    fn complete() {
+        let mut a = Node::new(1, 1);
+        assert_eq!(a.complete(), true);
+        a.set(0, 0, Tile::These(vec![0]));
+        assert_eq!(a.complete(), false);
+        a.set(0, 0, Tile::This(Some(2)));
+        assert_eq!(a.complete(), true);
+    }
+    #[test]
+    fn good() {
+        let mut a = Node::new(1, 1);
+        let b = Node::empty(1, 1, 1);
+        assert_eq!(a.good(), false);
+        assert_eq!(b.good(), false);
+
+        a.set(0, 0, Tile::This(Some(0)));
+        assert_eq!(a.good(), true);
+        a.set(0, 0, Tile::This(None));
+        assert_eq!(a.good(), false);
+    }
+    #[test]
+    fn min_choices() {
+        let mut a = Node::empty(1, 2, 1);
+        assert_eq!(a.min_choices(), Some((0, 0)));
+        a.set(0, 0, Tile::This(Some(0)));
+        assert_eq!(a.min_choices(), Some((0, 1)));
+        let mut b = Node::new(2, 2);
+        assert_eq!(b.min_choices(), None);
+        b.set(1, 1, Tile::These(vec![]));
+        assert_eq!(b.min_choices(), Some((1, 1)));
+    }
+    /// Crude test, requires futhre research into minimal neighborhood rule sets before it will
+    /// be clear what is necessary and crucial to test.
+    #[test]
+    fn collapse() {
+        let mut n = Neighborhood::new();
+        n.insert(0, 0);
+        n.insert(0, 1);
+        n.insert(0, 2);
+        n.insert(0, 3);
+        let mut tid = TID::new();
+        tid.mapping(vec![n]);
+        let mut a = Node::empty(1, 2, 1);
+        assert_eq!(a.data, vec![Tile::These(vec![0]), Tile::These(vec![0])]);
+        a.collapse(0, 0, 0, &tid);
+        assert_eq!(a.data, vec![Tile::This(Some(0)), Tile::This(Some(0))]);
+    }
+    #[test]
+    fn to_idmatrix() {
+        let mut a = Node::new(1, 1);
+        assert_eq!(a.to_idmatrix().data, vec![None]);
+        a.set(0, 0, Tile::This(Some(0)));
+        assert_eq!(a.to_idmatrix().data, vec![Some(0)]);
+
+        let mut b = Node::new(1, 2);
+        b.set(0, 1, Tile::This(Some(0)));
+        assert_eq!(b.to_idmatrix().data, vec![None, Some(0)]);
+
+        let mut c = Node::new(3, 1);
+        c.set(1, 0, Tile::This(Some(0)));
+        c.set(2, 0, Tile::This(Some(1)));
+        assert_eq!(c.to_idmatrix().data, vec![None, Some(0), Some(1)]);
+
+        let mut d = Node::new(3, 3);
+        d.set(0, 0, Tile::This(Some(0)));
+        d.set(1, 1, Tile::This(Some(1)));
+        d.set(2, 2, Tile::This(Some(2)));
+        d.set(2, 0, Tile::This(Some(3)));
+        d.set(0, 2, Tile::This(Some(4)));
+        d.set(1, 0, Tile::This(Some(5)));
+        d.set(2, 1, Tile::This(Some(6)));
+        d.set(1, 2, Tile::This(Some(7)));
+        d.set(0, 1, Tile::This(Some(8)));
+        assert_eq!(
+            d.to_idmatrix().data,
+            vec![
+                Some(0),
+                Some(5),
+                Some(3),
+                Some(8),
+                Some(1),
+                Some(6),
+                Some(4),
+                Some(7),
+                Some(2)
+            ]
+        );
+    }
 }
