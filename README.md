@@ -7,6 +7,14 @@ How can I turn a single image into more images that are somewhat like it?
 extension to view the math, maybe it won't be a pain in the ass to write it
 natively in the README one day...)
 
+## Todo
+
+- Write unit and integration tests for the image module, tit panics when computing TIS for safari.png
+- Write CENTER, CORNER, and SIDE algorithms in rust
+- Prototype genetic algos in python:
+    - write some words about why GA are suitable for image generation (how does this fit as an optimization problem?)
+- Update the TIS ingestion in pygen (json serialization changed).
+
 ## Theory
 
 `$\mathbb{I}$` denotes a tiled image, that is an image composed of a **tile sheet**
