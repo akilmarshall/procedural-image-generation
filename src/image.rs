@@ -1,14 +1,14 @@
 //! Image processing, contains structures and functions concerned with the ingest of processing of
 //! images into structred data for image generation.
 use crate::structures::matrix::{Matrix, Neighbors};
+use crate::util::mkdir;
 use image::{imageops, GenericImageView, RgbaImage};
 use imageops::overlay;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::collections::HashSet;
-use std::fs;
-use std::fs::{read_dir, DirBuilder, File};
+use std::fs::{read_dir, File};
 use std::io::Write;
 
 /// A type for directions, TODO: turn into an enum
@@ -70,11 +70,17 @@ impl Image {
     /// Compute a slim "id" matrix representing the original tiled image.
     fn id_matrix(&self) -> IDMatrix {
         let mut out = IDMatrix::new(self.rows as usize, self.cols as usize);
-        for i in 0..self.cols {
-            for j in 0..self.rows {
-                let u = i * self.tile_width;
-                let v = j * self.tile_height;
-                let subimg = imageops::crop_imm(&self.img, u, v, self.tile_width, self.tile_height);
+        for i in 0..out.cols {
+            for j in 0..out.rows {
+                let u = i * self.tile_width as usize;
+                let v = j * self.tile_height as usize;
+                let subimg = imageops::crop_imm(
+                    &self.img,
+                    u as u32,
+                    v as u32,
+                    self.tile_width,
+                    self.tile_height,
+                );
                 out.set(i as usize, j as usize, self.tile_id(subimg.to_image()));
             }
         }
@@ -90,8 +96,8 @@ impl Image {
         let n = self.tiles.len();
         let mut neighborhoods: Vec<Neighborhood> = (0..n).map(|_| Neighborhood::new()).collect();
         // scan the image tile by tile and process it's neighbors
-        for i in 0..self.cols {
-            for j in 0..self.rows {
+        for i in 0..img.cols() {
+            for j in 0..img.rows() {
                 if let Some(t) = img.at(i as usize, j as usize) {
                     for (d, h, k) in self.neighbors(i as usize, j as usize) {
                         if let Some(n) = img.at(h, k) {
@@ -120,7 +126,7 @@ impl TIS {
         TIS { data, tiles }
     }
     pub fn save_tilesheet(&self, path: String) {
-        fs::create_dir(&path).ok();
+        mkdir(&path);
         let mut i: u32 = 0;
         for tile in &self.tiles {
             tile.save(format!("{}/{}.png", &path, i)).ok();
@@ -129,7 +135,8 @@ impl TIS {
     }
     pub fn save_all(&self, path: String) {
         let flat_data = serde_json::to_string(&self.data).unwrap();
-        DirBuilder::new().recursive(true).create(&path).unwrap();
+        // DirBuilder::new().recursive(true).create(&path).unwrap();
+        mkdir(&path);
         self.save_tilesheet(String::from(format!("{}/tiles", path)));
         match File::create(format!("{}/TIS.json", path)) {
             Ok(mut file) => {
