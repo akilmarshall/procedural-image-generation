@@ -1,7 +1,7 @@
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::Path;
 
-pub fn mkdir(p: &String) {
+pub fn mkdir(p: &str) {
     // check if path exists
     // true -> recursive delete
     // make new directory at path
