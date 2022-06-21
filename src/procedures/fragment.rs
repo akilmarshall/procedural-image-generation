@@ -1,17 +1,9 @@
-use crate::image::{IDMatrix, TIS};
-use crate::structures::matrix::Neighbors;
+use crate::image::TIS;
 use crate::structures::node::{Node, Tile};
 use crate::util::mkdir;
 
 pub fn core(t: usize, tis: TIS) {
     assert!(t < tis.data.n);
-    println!(
-        "a:{} b:{} c:{} d:{}",
-        tis.data.neighborhood(t, 0).len(),
-        tis.data.neighborhood(t, 1).len(),
-        tis.data.neighborhood(t, 2).len(),
-        tis.data.neighborhood(t, 3).len()
-    );
     let mut out = Vec::new();
     for a in tis.data.neighborhood(t, 0) {
         for b in tis.data.neighborhood(t, 1) {
