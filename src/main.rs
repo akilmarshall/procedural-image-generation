@@ -5,8 +5,8 @@ mod util;
 
 use crate::image::{load_tis, Image, TID, TIS};
 use crate::procedures::backtrack::search;
+use crate::procedures::fragment::core;
 use crate::structures::node::Node;
-use crate::util::mkdir;
 use clap::{arg, Command};
 
 fn cli() -> Command<'static> {
@@ -101,6 +101,7 @@ fn main() {
                         let t = args.value_of("TILE").unwrap().parse::<usize>().unwrap();
                         if t < tis.data.n {
                             println!("CENTER with {} coming soon", t);
+                            core(t, tis);
                         } else {
                             println!("invalid id, must be in [0, {}) not {}.", tis.data.n, t);
                         }
