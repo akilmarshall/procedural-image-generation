@@ -102,18 +102,14 @@ impl Node {
     /// Compute an IDMatrix representation.
     pub fn to_idmatrix(&self) -> IDMatrix {
         let mut id_matrix = IDMatrix::new(self.cols, self.rows);
-        for i in 0..self.cols {
-            for j in 0..self.rows {
-                match self.at(i, j) {
-                    Tile::This(Some(t)) => {
-                        id_matrix.set(i, j, Some(t));
-                    }
-                    Tile::This(None) | Tile::These(_) => {
-                        id_matrix.set(i, j, None);
-                    }
-                }
-            }
-        }
+        id_matrix.data = self
+            .data
+            .iter()
+            .map(|d| match d {
+                Tile::This(Some(t)) => Some(t.clone()),
+                Tile::This(None) | Tile::These(_) => None,
+            })
+            .collect();
         id_matrix
     }
 }
