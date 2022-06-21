@@ -69,7 +69,7 @@ impl Image {
     }
     /// Compute a slim "id" matrix representing the original tiled image.
     fn id_matrix(&self) -> IDMatrix {
-        let mut out = IDMatrix::new(self.rows as usize, self.cols as usize);
+        let mut out = IDMatrix::new(self.cols as usize, self.rows as usize);
         for i in 0..out.cols {
             for j in 0..out.rows {
                 let u = i * self.tile_width as usize;
@@ -251,13 +251,12 @@ impl TID {
     }
 }
 
-fn load_tiles(dir: String) -> Vec<RgbaImage> {
+fn load_tiles(dir: String, n: usize) -> Vec<RgbaImage> {
     let mut tiles = Vec::new();
-    for s in read_dir(format!("{}/tiles", dir)).unwrap() {
-        if let Ok(tile_path) = s {
-            let tile = ::image::open(tile_path.path()).unwrap();
-            tiles.push(tile.to_rgba8());
-        }
+    for i in 0..n {
+        let path = format!("{}/tiles/{}.png", dir, i);
+        let tile = ::image::open(path).unwrap();
+        tiles.push(tile.to_rgba8());
     }
     tiles
 }
@@ -279,12 +278,18 @@ fn load_tid(path: String) -> Option<TID> {
 pub fn load_tis(dir: String) -> Option<TIS> {
     match load_tid(dir.to_string()) {
         Some(data) => {
-            return Some(TIS {
-                data,
-                tiles: load_tiles(dir),
-            })
+            let tiles = load_tiles(dir, data.n);
+            return Some(TIS { data, tiles });
         }
         _ => {}
     }
     None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // #[test]
+    // fn
 }
