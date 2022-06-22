@@ -21,14 +21,12 @@ class TIS:
             self.n = tid["n"]
             self.width = tid["width"]
             self.height = tid["height"]
-            self._setup(tid["mapping"])
+            self._setup(tid["neighborhoods"])
 
-    def _setup(self, mapping):
+    def _setup(self, neighborhoods):
         self.mapping = []
-        for data in mapping:
-            neighbors = []
-            for n in data:
-                neighbors.append(n["data"])
+        for n in neighborhoods:
+            neighbors = n['neighbors']
             self.mapping.append(neighbors)
         self.tiles = []
 
@@ -49,11 +47,7 @@ class TIS:
         """
         assert 0 <= t < self.n
         assert 0 <= n < 4
-        ids = []
-        for (i, x) in enumerate(self.mapping[t][n]):
-            if x > 0:
-                ids.append(i)
-        return ids
+        return self.mapping[t][n]
 
     def intersect(self, u, x, v, y):
         """
