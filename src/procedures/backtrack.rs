@@ -6,7 +6,7 @@ use crate::structures::node::{Node, Tile};
 use std::collections::VecDeque;
 
 /// Given a seed Node attempt to complete the image, computes a vector with ALL
-/// legal tile arrangements placing as many tiles as possible.
+/// possible legal tile arrangements placing as many tiles as possible.
 pub fn search(seed: Node, tis: TID) -> Vec<IDMatrix> {
     let mut out: Vec<IDMatrix> = Vec::new();
     let mut active = VecDeque::from([seed]);
