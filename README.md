@@ -9,9 +9,11 @@ natively in the README one day...)
 
 ## Todo
 
-- Write unit and integration tests for the image module, tit panics when computing TIS for safari.png
+- Write unit and integration tests for the image module, tit panics when computing
+  TIS for safari.png
 - Prototype genetic algos in python:
-    - write some words about why GA are suitable for image generation (how does this fit as an optimization problem?)
+    - write some words about why GA are suitable for image generation
+      (how does this fit as an optimization problem?)
 
 ## Theory
 
@@ -40,7 +42,7 @@ Each image `$\mathbb{I}$` also has an associated **neighbor** function,
 that takes a tile and a direction and returns a list of the tiles seen adjacent
 in the specified direction `$\{0, 1, 2, 3\}$`.
 
-![Neigbor directions](https://imgur.com/9MSJKR7.png)
+![Neighbor directions](https://imgur.com/9MSJKR7.png)
 
 Together `$(\mathbb{I}, \mathbb{T}, \mathcal{N})$` can be called
 **tiled image statistics** (TIS).
