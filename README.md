@@ -15,6 +15,25 @@ natively in the README one day...)
     - write some words about why GA are suitable for image generation
       (how does this fit as an optimization problem?)
 
+## Examples
+
+Using the following image as input ![minimal input example](https://imgur.com/ZuOinkm.png).
+
+### Fragment 
+
+#### CENTER
+
+![CENTER algorithm output](https://imgur.com/0fcqyXN.png)
+
+#### CORNER
+
+![CORNER algorithm output](https://imgur.com/pXQtAjm.png)
+
+#### SIDE
+
+![SIDE algorithm output](https://imgur.com/dZEUcL5.png)
+
+
 ## Theory
 
 `$\mathbb{I}$` denotes a tiled image, that is an image composed of a **tile sheet**
