@@ -16,15 +16,22 @@ How can I turn a single image into more images that are somewhat like it?
 
 Using the following image as input 
 
-![minimal input example](https://imgur.com/ZuOinkm.png).
+<p align="center">
+<img src=https://imgur.com/ZuOinkm.png/>
+</p>
+<p align = "center">minimal input example</p>
 
 Made up of the following tileset
 
-![tileset](https://imgur.com/CfTFzSk.png)
+<p align="center">
+<img src=https://imgur.com/CfTFzSk.png/>
+</p>
 
 It's neighbor functions are visualized below
 
-![neighbor function visualization](https://imgur.com/GQAaMIr.png)
+<p align="center">
+<img src=https://imgur.com/GQAaMIr.png/>
+</p>
 
 ### Fragment
 
@@ -37,12 +44,21 @@ The images are in no particular order.
 
 #### CENTER
 
-![CENTER algorithm output](https://imgur.com/0fcqyXN.png)
+<p align="center">
+<img src=https://imgur.com/0fcqyXN.png/>
+</p>
+<p align = "center">CENTER algorithm output</p>
 
 #### CORNER
 
-![CORNER algorithm output](https://imgur.com/pXQtAjm.png)
+<p align="center">
+<img src=https://imgur.com/pXQtAjm.png>
+</p>
+<p align = "center">CORNER algorithm output</p>
 
 #### SIDE
 
-![SIDE algorithm output](https://imgur.com/dZEUcL5.png)
+<p align="center">
+<img src=https://imgur.com/dZEUcL5.png>
+</p>
+<p align = "center">SIDE algorithm output</p>
