@@ -21,7 +21,9 @@ pub fn search(seed: Node, tis: TID) -> Vec<IDMatrix> {
                             let mut fork = img.clone();
                             fork.collapse(x, y, t, &tis);
                             if fork.complete() {
-                                out.push(fork.to_idmatrix())
+                                if fork.good() {
+                                    out.push(fork.to_idmatrix())
+                                }
                             } else {
                                 active.push_front(fork);
                             }
