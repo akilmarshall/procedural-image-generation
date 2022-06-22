@@ -19,7 +19,17 @@ natively in the README one day...)
 
 ## Examples
 
-Using the following image as input ![minimal input example](https://imgur.com/ZuOinkm.png).
+Using the following image as input 
+
+![minimal input example](https://imgur.com/ZuOinkm.png).
+
+Made up of the following tileset
+
+![tileset](https://imgur.com/CfTFzSk.png)
+
+It's neighbor functions are visualized below
+
+![neighbor function visualization](https://imgur.com/GQAaMIr.png)
 
 ### Fragment
 
