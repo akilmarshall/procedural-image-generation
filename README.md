@@ -10,10 +10,8 @@ natively in the README one day...)
 ## Todo
 
 - Write unit and integration tests for the image module, tit panics when computing TIS for safari.png
-- Write CENTER, CORNER, and SIDE algorithms in rust
 - Prototype genetic algos in python:
     - write some words about why GA are suitable for image generation (how does this fit as an optimization problem?)
-- Update the TIS ingestion in pygen (json serialization changed).
 
 ## Theory
 
@@ -171,11 +169,11 @@ The `$CORNER$` algorithm takes 4 steps:
     1. select `$c$` from `$C$`.
 3. Compute `$\{D, E\}$` from `$c$` directly
     1. select `$\{d, e\}$` from `$\{D, E\}$` respectively.
-4. Compute `$\{G, H\}$` from `$\mathcal{N}(e, 0)\cap\mathcal{N}(d, 3)$` and
+4. Compute `$\{F, G, H\}$` from `$\mathcal{N}(b, 0)\cap\mathcal{N}(a, 1)$`, `$\mathcal{N}(e, 0)\cap\mathcal{N}(d, 3)$` and
    `$\mathcal{N}(b, 3)\cap\mathcal{N}(e, 2)$` respectively
-    1. select `$\{g, h\}$` from `$\{G, H\}$` respectively.
+    1. select `$\{f, g, h\}$` from `$\{F, G, H\}$` respectively.
 
-![Explanded description of the CORNER algorithm](https://imgur.com/IRQ4Ppm.png)
+![Expanded description of the CORNER algorithm](https://imgur.com/IRQ4Ppm.png)
 
 ### Edge Expansion
 
