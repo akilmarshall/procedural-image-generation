@@ -2,11 +2,6 @@
 
 How can I turn a single image into more images that are somewhat like it?
 
-
-(you need [xhub](https://github.com/nschloe/xhub)
-extension to view the math, maybe it won't be a pain in the ass to write it
-natively in the README one day...)
-
 ## Todo
 
 - Write unit and integration tests for the image module, tit panics when computing
@@ -51,8 +46,3 @@ The images are in no particular order.
 #### SIDE
 
 ![SIDE algorithm output](https://imgur.com/dZEUcL5.png)
-
-## tiled-image-tool
-
-A command line tool written in rust for computing statistics from tiled images
-and procedurally generating new images.
