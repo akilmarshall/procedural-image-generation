@@ -14,6 +14,8 @@ natively in the README one day...)
 - Prototype genetic algos in python:
     - write some words about why GA are suitable for image generation
       (how does this fit as an optimization problem?)
+- implement tile sheet dump [rust]
+- implement neighbor function visual dump [rust]
 
 ## Examples
 
