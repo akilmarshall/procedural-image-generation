@@ -131,7 +131,8 @@ def sudoku_dump(n: int, m: int, tis: TIS, path: str, verbose=False, log=False, p
     if exists(path):
         rmtree(path)
     mkdir(path)
-    mkdir(f'{path}/partial')
+    if partial:
+        mkdir(f'{path}/partial')
     for i, img in enumerate(generate(n, m, tis, verbose, log)):
         out = img.to_image()
         if img.good():
