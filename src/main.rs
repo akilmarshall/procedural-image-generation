@@ -5,7 +5,7 @@ mod util;
 
 use crate::image::{load_tis, Image, TID, TIS};
 use crate::procedures::backtrack::search;
-use crate::procedures::fragment::core;
+use crate::procedures::fragment::{center, corner, side};
 use crate::structures::node::Node;
 use clap::{arg, Command};
 
@@ -28,8 +28,8 @@ fn cli() -> Command<'static> {
                 .arg_required_else_help(true),
         )
         .subcommand(
-            Command::new("all")
-                .about("Use Tiled Image Statistics to generate a large amount of new images of specific dimension.")
+            Command::new("bts")
+                .about("Use Tiled Image Statistics to generate a large amount of new images of specific dimension using constrained backtracking search.")
                 .args(&[arg!(<TIS> "TIS"), arg!(<COL> "columns"), arg!(<ROW> "rows")])
                 .arg_required_else_help(true),
         )
@@ -40,20 +40,20 @@ fn cli() -> Command<'static> {
                 .args(&[arg!(<TIS> "TIS")])
                 .subcommand(
                     Command::new("center")
-                        .about("The CENTER algorithm for Fragment computation, seeded with tile-id")
-                        .args(&[arg!(<TILE> "tile-id")])
+                        .about("The CENTER algorithm for Fragment computation, seeded with tile-id. Use 'all' to compute them for all tiles.")
+                        .args(&[arg!(<TILE> "tile-id | all")])
                         .arg_required_else_help(true)
                 )
                 .subcommand(
                     Command::new("side")
-                        .about("The SIDE algorithm for Fragment computation, seeded with tile-id")
-                        .args(&[arg!(<TILE> "tile-id")])
+                        .about("The SIDE algorithm for Fragment computation, seeded with tile-id. Use 'all' to compute them for all tiles.")
+                        .args(&[arg!(<TILE> "tile-id | all")])
                         .arg_required_else_help(true)
                 )
                 .subcommand(
                     Command::new("corner")
-                        .about("The CORNER algorithm for Fragment computation, seeded with tile-id")
-                        .args(&[arg!(<TILE> "tile-id")])
+                        .about("The CORNER algorithm for Fragment computation, seeded with tile-id. Use 'all' to compute them for all tiles.")
+                        .args(&[arg!(<TILE> "tile-id | all")])
                         .arg_required_else_help(true)
                 )
         )
@@ -98,28 +98,48 @@ fn main() {
             if let Some(tis) = load_tis(path.to_string()) {
                 match args.subcommand().unwrap() {
                     ("center", args) => {
-                        let t = args.value_of("TILE").unwrap().parse::<usize>().unwrap();
-                        if t < tis.data.n {
-                            println!("CENTER with {} coming soon", t);
-                            core(t, tis);
+                        let t = args.value_of("TILE").unwrap();
+                        if t == "all" {
+                            for i in 0..tis.data.n {
+                                center(i, tis.clone());
+                            }
                         } else {
-                            println!("invalid id, must be in [0, {}) not {}.", tis.data.n, t);
+                            let tid = t.parse::<usize>().unwrap();
+                            if tid < tis.data.n {
+                                center(tid, tis);
+                            } else {
+                                println!("invalid id, must be in [0, {}) not {}.", tis.data.n, tid);
+                            }
                         }
                     }
                     ("corner", args) => {
-                        let t = args.value_of("TILE").unwrap().parse::<usize>().unwrap();
-                        if t < tis.data.n {
-                            println!("CORNER with {} coming soon", t);
+                        let t = args.value_of("TILE").unwrap();
+                        if t == "all" {
+                            for i in 0..tis.data.n {
+                                corner(i, tis.clone());
+                            }
                         } else {
-                            println!("invalid id, must be in [0, {}) not {}.", tis.data.n, t);
+                            let tid = t.parse::<usize>().unwrap();
+                            if tid < tis.data.n {
+                                corner(tid, tis);
+                            } else {
+                                println!("invalid id, must be in [0, {}) not {}.", tis.data.n, tid);
+                            }
                         }
                     }
                     ("side", args) => {
-                        let t = args.value_of("TILE").unwrap().parse::<usize>().unwrap();
-                        if t < tis.data.n {
-                            println!("SIDE with {} coming soon", t);
+                        let t = args.value_of("TILE").unwrap();
+                        if t == "all" {
+                            for i in 0..tis.data.n {
+                                side(i, tis.clone());
+                            }
                         } else {
-                            println!("invalid id, must be in [0, {}) not {}.", tis.data.n, t);
+                            let tid = t.parse::<usize>().unwrap();
+                            if tid < tis.data.n {
+                                side(tid, tis);
+                            } else {
+                                println!("invalid id, must be in [0, {}) not {}.", tis.data.n, tid);
+                            }
                         }
                     }
                     _ => {}
