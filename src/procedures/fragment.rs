@@ -70,7 +70,7 @@ pub fn side(t: usize, tis: TIS) {
                             let Ha = tis.data.neighborhood(*d, 3);
                             let Hb = tis.data.neighborhood(f, 2);
                             let Ga = tis.data.neighborhood(f, 0);
-                            let Gb = tis.data.neighborhood(*e, 2);
+                            let Gb = tis.data.neighborhood(*e, 3);
                             for h in Ha.intersection(&Hb) {
                                 for g in Ga.intersection(&Gb) {
                                     let mut img = Node::new(3, 3);
@@ -101,8 +101,8 @@ pub fn side(t: usize, tis: TIS) {
 pub fn corner(t: usize, tis: TIS) {
     assert!(t < tis.data.n);
     let mut out = Vec::new();
-    let A = tis.data.neighborhood(t, 2);
-    let B = tis.data.neighborhood(t, 1);
+    let A = tis.data.neighborhood(t, 0);
+    let B = tis.data.neighborhood(t, 3);
     for a in A {
         for b in &B {
             let Ca = tis.data.neighborhood(*b, 0);
