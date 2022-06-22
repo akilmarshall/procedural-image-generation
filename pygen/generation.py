@@ -127,7 +127,7 @@ def generate(n: int, m: int, tis: TIS, verbose:bool, log:bool):
         plt.savefig(f'{n}x{m} population plot.png')
 
 
-def sudoku_dump(n: int, m: int, tis: TIS, path: str, verbose=False, log=False):
+def sudoku_dump(n: int, m: int, tis: TIS, path: str, verbose=False, log=False, partial=False):
     if exists(path):
         rmtree(path)
     mkdir(path)
@@ -136,5 +136,5 @@ def sudoku_dump(n: int, m: int, tis: TIS, path: str, verbose=False, log=False):
         out = img.to_image()
         if img.good():
             out.save(f"{path}/{i}.png")
-        else:
+        elif partial:
             out.save(f"{path}/partial/{i}.png")
