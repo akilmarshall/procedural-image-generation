@@ -19,7 +19,14 @@ natively in the README one day...)
 
 Using the following image as input ![minimal input example](https://imgur.com/ZuOinkm.png).
 
-### Fragment 
+### Fragment
+
+For this incredibly minimal input image each algorithm produced only 10 outputs
+each. Each algorithm was able to produce the original image, in fact each algorithm
+produced the exact same output. This is not to be expected and is perhaps an
+artifact of the simplicity of the input image, the exact reasons are currently unknown.
+
+The images are in no particular order.
 
 #### CENTER
 
@@ -32,7 +39,6 @@ Using the following image as input ![minimal input example](https://imgur.com/Zu
 #### SIDE
 
 ![SIDE algorithm output](https://imgur.com/dZEUcL5.png)
-
 
 ## Theory
 
