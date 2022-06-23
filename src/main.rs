@@ -7,6 +7,7 @@ use crate::image::{load_tis, Image, TID, TIS};
 use crate::procedures::backtrack::search;
 use crate::procedures::fragment::{center, corner, side};
 use crate::structures::node::Node;
+use crate::util::mkdir;
 use clap::{arg, Command};
 
 fn cli() -> Command<'static> {
@@ -78,7 +79,7 @@ fn main() {
             let dir = args.value_of("OUT").unwrap_or("TIS");
             tis.save_all(dir.to_string());
         }
-        Some(("all", args)) => {
+        Some(("bts", args)) => {
             let path = args.value_of("TIS").unwrap();
             let rows = args.value_of("ROW").unwrap().parse::<usize>().unwrap();
             let cols = args.value_of("COL").unwrap().parse::<usize>().unwrap();
@@ -86,6 +87,7 @@ fn main() {
                 Some(tis) => {
                     // do some inference with tis
                     let seed = Node::empty(cols, rows, tis.data.n);
+                    mkdir("out");
                     for (i, gimg) in search(seed, tis.data.clone()).into_iter().enumerate() {
                         tis.decode(gimg).save(format!("out/{}.png", i)).ok();
                     }
