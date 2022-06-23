@@ -4,8 +4,6 @@ How can I turn a single image into more images that are somewhat like it?
 
 ## Todo
 
-- Write unit and integration tests for the image module, tit panics when computing
-  TIS for safari.png
 - Prototype genetic algos in python:
     - write some words about why GA are suitable for image generation
       (how does this fit as an optimization problem?)
