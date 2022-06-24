@@ -1,11 +1,14 @@
+from itertools import product
+from itertools import product
 import json
 from os import mkdir
 from os.path import exists
+from random import choice, randint
 from shutil import rmtree
 
 from PIL import Image, ImageDraw
+import numpy as np
 from tqdm import tqdm
-from itertools import product
 
 
 class TIS:
@@ -182,3 +185,89 @@ class TIS:
                 img.paste(self.tiles[t], box=(h, k))
 
         return img
+
+class Individual:
+    """
+    Individual for "genetic" tinkering
+    """
+    def __init__(self, n:int, m:int, tis:TIS):
+        self.cols = n
+        self.rows = m
+        self.data = np.zeros((n, m), np.int8)
+        self._rand_init(tis)
+
+    def conformity(self, x:int, y:int, tis:TIS, t:int|None=None) -> int:
+        """
+        Compute the conformity of at (x, y),
+        optionally define t
+        """
+        score = 0
+        if t is None:
+            t = self.data[x][y]
+        for nid, i, j in self._neighbors(x, y):
+            if self.data[i][j] in tis.nids(t, nid):
+                score += 1
+        return score
+
+    def fitness(self, tis:TIS) -> int:
+        """Compute the fitness, aka the sum of each tiles conformity. """
+        score = 0
+        for x, y in self._positions():
+            score += self.conformity(x, y, tis)
+        return score
+
+    def mutate(self, tis:TIS):
+        """Set a random location to a random tile. """
+        x, y = self._rand_pos()
+        t = self._rand_individual(tis)
+        self.data[x][y] = t
+
+    def mutate_improve(self, tis:TIS):
+        """A random position's neighbors are made to conform to the neighbor function. """
+        x, y = self._rand_pos()
+        t = self.data[x][y]
+        for (nid, i, j) in self._neighbors(x, y):
+            nids =tis.nids(t, nid) 
+            if t not in nids and nids:
+                self.data[i][j] = choice(nids)
+
+
+    def _positions(self):
+        """Return an iterator over all positions. """
+        return product(range(self.cols), range(self.rows))
+
+    def _neighbors(self, x, y):
+        """Return an iterator of the neighbors of (x, y) on a torus. """
+        yield 0, (x + 1) % self.cols, y
+        yield 3, x, (y + 1) % self.rows
+        yield 2, (x - 1) % self.cols, y
+        yield 1, x, (y - 1) % self.rows
+
+    def _rand_pos(self) -> tuple[int, int]:
+        """Return a random position. """
+        return randint(0, self.cols - 1), randint(0, self.rows - 1)
+    
+    def min_conform(self, tis:TIS) -> tuple[int, int] | None:
+        """Return the position with minimum conformity or None. """
+        c = None
+        i, j = None, None
+        for x, y in self._positions():
+            v = self.conformity(x, y, tis)
+            if v < 4 and (c is None or v < c):
+                c = v
+                i, j = x, y
+        if c is not None: 
+            return (i, j)
+
+    def _rand_individual(self, tis:TIS) -> int:
+        """Return a random valid individual. """
+        return randint(0, tis.n - 1)
+
+    def _rand_init(self, tis:TIS):
+        """Set each position to a random valid value. """
+        for x, y in self._positions():
+            self.data[x][y] = self._rand_individual(tis)
+
+    def _max_score(self) -> int:
+        """Return the maximum conformity score, aka each tile is fully accepted. """
+        return 4 * self.cols * self.rows
