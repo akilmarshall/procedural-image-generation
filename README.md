@@ -16,19 +16,19 @@ Using the following image as input
 </p>
 <p align = "center">minimal input example</p>
 
-Made up of the following tileset
+Made up of the following [tileset](https://github.com/akilmarshall/procedural-image-generation/wiki/Theory)
 
 <p align="center">
 <img src=https://imgur.com/CfTFzSk.png/>
 </p>
 
-It's neighbor functions are visualized below
+It's [neighbor functions](https://github.com/akilmarshall/procedural-image-generation/wiki/Theory#neighbor-function) are visualized below
 
 <p align="center">
 <img src=https://imgur.com/GQAaMIr.png/>
 </p>
 
-### Fragment
+### [Fragment](https://github.com/akilmarshall/procedural-image-generation/wiki/Procedures#fragment)
 
 For this incredibly minimal input image each algorithm produced only 10 outputs
 each. Each algorithm was able to produce the original image, in fact each algorithm
@@ -37,28 +37,28 @@ artifact of the simplicity of the input image, the exact reasons are currently u
 
 The images are in no particular order.
 
-#### CENTER
+#### [CENTER](https://github.com/akilmarshall/procedural-image-generation/wiki/CENTER-algorithm)
 
 <p align="center">
 <img src=https://imgur.com/0fcqyXN.png/>
 </p>
 <p align = "center">CENTER algorithm output</p>
 
-#### CORNER
+#### [CORNER](https://github.com/akilmarshall/procedural-image-generation/wiki/CORNER-algorithm)
 
 <p align="center">
 <img src=https://imgur.com/pXQtAjm.png>
 </p>
 <p align = "center">CORNER algorithm output</p>
 
-#### SIDE
+#### [SIDE](https://github.com/akilmarshall/procedural-image-generation/wiki/SIDE-algorithm)
 
 <p align="center">
 <img src=https://imgur.com/dZEUcL5.png>
 </p>
 <p align = "center">SIDE algorithm output</p>
 
-### Minimum Conformity Improvement
+### [Minimum Conformity Improvement](https://github.com/akilmarshall/procedural-image-generation/wiki/Minimum-Conformity-Improvement)
 
 1. Begin with an image
 2. Select the tile with the least [conformity](https://github.com/akilmarshall/procedural-image-generation/wiki/Genetic-Algorithms#conformity-function) (halt if all conforming or [done](https://github.com/akilmarshall/procedural-image-generation/wiki/Minimum-Conformity-Improvement#termination))
