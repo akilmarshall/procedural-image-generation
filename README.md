@@ -4,9 +4,6 @@ How can I turn a single image into more images that are somewhat like it?
 
 ## Todo
 
-- Prototype genetic algos in python:
-    - write some words about why GA are suitable for image generation
-      (how does this fit as an optimization problem?)
 - implement tile sheet dump [rust]
 - implement neighbor function visual dump [rust]
 
