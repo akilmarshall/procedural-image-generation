@@ -61,7 +61,7 @@ The images are in no particular order.
 ### Minimum Conformity Improvement
 
 1. Begin with an image
-2. Select the tile with the least conformity (halt if all conforming or done)
+2. Select the tile with the least [conformity](https://github.com/akilmarshall/procedural-image-generation/wiki/Genetic-Algorithms#conformity-function) (halt if all conforming or [done](https://github.com/akilmarshall/procedural-image-generation/wiki/Minimum-Conformity-Improvement#termination))
 3. change it's neighbors to tiles from it's neighbor sets (force conformity)
 4. goto 2
 
