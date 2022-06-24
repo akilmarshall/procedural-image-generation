@@ -1,96 +1,9 @@
-from .util import TIS
-from itertools import product
-import numpy as np
-from random import randint, choice
-import matplotlib.pyplot as plt
-from tqdm import tqdm
 from copy import deepcopy
 
+import matplotlib.pyplot as plt
+from tqdm import tqdm
 
-class Individual:
-    """
-    Individual for "genetic" tinkering
-    """
-    def __init__(self, n, m, tis):
-        self.cols = n
-        self.rows = m
-        self.data = np.zeros((n, m), np.int8)
-        self._rand_init(tis)
-
-    def conform(self,t, x, y, tis) -> int:
-        score = 0
-        for nid, i, j in self._neighbors(x, y):
-            if self.data[i][j] in tis.nids(t, nid):
-                score += 1
-        return score
-
-    def fitness(self, tis:TIS) -> int:
-        score = 0
-        for x, y in self._positions():
-            t = self.data[x][y]
-            score += self.conform(t, x, y, tis)
-        return score
-
-    def mutate(self, tis:TIS):
-        """Randomly mutate self. """
-        x, y = self._rand_pos()
-        t = self._rand_individual(tis)
-        self.data[x][y] = t
-
-    def mutate_improve(self, tis:TIS, mc):
-        """At a random position it's neighbors are made to conform to the neighbor function. """
-        if mc:
-            x, y = self._min_conform(tis)
-        else:
-            x, y = self._rand_pos()
-        t = self.data[x][y]
-        for (nid, i, j) in self._neighbors(x, y):
-            nids =tis.nids(t, nid) 
-            if t not in nids and nids:
-                self.data[i][j] = choice(nids)
-
-
-    def _positions(self):
-        return product(range(self.cols), range(self.rows))
-
-    def _neighbors(self, x, y):
-        if x < self.cols - 1:
-            yield 0, x + 1, y
-        if y < self.rows - 1:
-            yield 3, x, y + 1
-        if x > 0:
-            yield 2, x - 1, y
-        if y > 0:
-            yield 1, x, y - 1
-
-    def _rand_pos(self) -> tuple[int, int]:
-        return randint(0, self.cols - 1), randint(0, self.rows - 1)
-    
-    def _min_conform(self, tis:TIS) -> tuple[int, int]:
-        c = None
-        i, j = 0, 0
-        for x, y in self._positions():
-            t = self.data[x][y]
-            v = self.conform(t, x, y, tis)
-            if c is None or v < c:
-                c = v
-                i, j = x, y
-        return i, j
-
-    def _rand_individual(self, tis:TIS) -> int:
-        return randint(0, tis.n - 1)
-
-    def _rand_init(self, tis:TIS):
-        """Set each position to a random valid value. """
-        for x, y in self._positions():
-            self.data[x][y] = self._rand_individual(tis)
-
-    def _max_score(self) -> int:
-        if self.cols > 2 and self.rows > 2:
-            return 2 * 3 * (self.rows - 2) + 2 * 3 * (self.cols - 2) + 8 + 4 * (self.rows - 2) * (self.cols - 2)
-
-        return 0
-
+from .util import Individual, TIS
 
 
 class MutateEvolve:
@@ -128,7 +41,7 @@ class MutateEvolve:
         fit = [i[1] for i in ordered]
         self.population = fit[0:n]
 
-    def mutate(self, improve, min_conform):
+    def mutate(self, improve):
         """
         For each individual in the population mutate it and append it to the population.
         Doubles the population.
@@ -137,13 +50,13 @@ class MutateEvolve:
         for i in self.population:
             fork = deepcopy(i)
             if improve:
-                fork.mutate_improve(self.tis, min_conform)
+                fork.mutate_improve(self.tis)
             else:
                 fork.mutate(self.tis)
             new.append(fork)
         self.population += new
 
-    def run(self, reset=False, plot=False, improve=False, min_conform=False):
+    def run(self, reset=False, plot=False, improve=False):
         """
         Evolve the population [self.t] time steps,
         if reset is True the population is reset, otherwise evolution is continued.
@@ -159,7 +72,7 @@ class MutateEvolve:
                 avg_fitness.append(self._avg_fitness())
 
             self.cull()
-            self.mutate(improve, min_conform)
+            self.mutate(improve)
 
         if plot:
             self.avg_fitness.append(avg_fitness)
