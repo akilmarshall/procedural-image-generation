@@ -57,3 +57,29 @@ The images are in no particular order.
 <img src=https://imgur.com/dZEUcL5.png>
 </p>
 <p align = "center">SIDE algorithm output</p>
+
+### Minimum Conformity Improvement
+
+1. Begin with an image
+2. Select the tile with the least conformity (halt if all conforming or done)
+3. change it's neighbors to tiles from it's neighbor sets (force conformity)
+4. goto 2
+
+Several runs of this naive algorithm produce the following select output
+
+<p align="center">
+<img src=https://imgur.com/MYrgU01.png>
+</p>
+<p align = "center">10x10 fitness score 50</p>
+
+<p align="center">
+<img src=https://imgur.com/5L3a8Ch.png>
+</p>
+<p align = "center">10x10 fitness score 220</p>
+
+<p align="center">
+<img src=https://imgur.com/3G4ylRZ.png>
+</p>
+<p align = "center">10x10 fitness score 130</p>
+
+A **perfect** image would have a score of 400.
