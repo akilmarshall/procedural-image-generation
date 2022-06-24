@@ -6,6 +6,7 @@ How can I turn a single image into more images that are somewhat like it?
 
 - implement tile sheet dump [rust]
 - implement neighbor function visual dump [rust]
+- write code to make animated gifs from MCI algorithms
 
 ## Examples
 
