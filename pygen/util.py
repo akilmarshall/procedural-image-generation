@@ -208,6 +208,13 @@ class Individual:
             if self.data[i][j] in tis.nids(t, nid):
                 score += 1
         return score
+    def conform(self, x:int, y:int, tis:TIS):
+        """(x, y)'s neighborbood is made to conform with it w.r.t. tis. """
+        t = self.data[x][y]
+        for (nid, i, j) in self._neighbors(x, y):
+            nids = tis.nids(t, nid) 
+            if t not in nids and nids:
+                self.data[i][j] = choice(nids)
 
     def fitness(self, tis:TIS) -> int:
         """Compute the fitness, aka the sum of each tiles conformity. """
@@ -225,11 +232,7 @@ class Individual:
     def mutate_improve(self, tis:TIS):
         """A random position's neighbors are made to conform to the neighbor function. """
         x, y = self._rand_pos()
-        t = self.data[x][y]
-        for (nid, i, j) in self._neighbors(x, y):
-            nids =tis.nids(t, nid) 
-            if t not in nids and nids:
-                self.data[i][j] = choice(nids)
+        self.conform(x, y, tis)
 
 
     def _positions(self):
