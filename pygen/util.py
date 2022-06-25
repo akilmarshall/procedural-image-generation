@@ -1,10 +1,10 @@
 from itertools import product
-from itertools import product
 import json
 from os import mkdir
 from os.path import exists
 from random import choice, randint
 from shutil import rmtree
+from copy import deepcopy
 
 from PIL import Image, ImageDraw
 import numpy as np
@@ -195,6 +195,25 @@ class Individual:
         self.rows = m
         self.data = np.zeros((n, m), np.int8)
         self._rand_init(tis)
+        self._max = tis.n
+        self._start = deepcopy(self.data)
+        self._change_history = []
+
+    def to_gif(self, tis:TIS, fname:str):
+        frames = [tis.to_image(self._start)]
+        img = deepcopy(self._start)
+        for x, y, t in self._change_history:
+            img[x][y] = t
+            frames.append(tis.to_image(img))
+        frames[0].save(fname,
+			save_all = True, append_images = frames[1:],
+			optimize = False)
+
+    def set(self, x, y, t):
+        assert(x < self.cols and y < self.rows and t < self._max)
+        self.data[x][y] = t 
+        self._change_history.append((x, y, t))
+
 
     def conformity(self, x:int, y:int, tis:TIS, t:int|None=None) -> int:
         """
@@ -214,7 +233,7 @@ class Individual:
         for (nid, i, j) in self._neighbors(x, y):
             nids = tis.nids(t, nid) 
             if t not in nids and nids:
-                self.data[i][j] = choice(nids)
+                self.set(i, j, choice(nids))
 
     def fitness(self, tis:TIS) -> int:
         """Compute the fitness, aka the sum of each tiles conformity. """
@@ -227,7 +246,7 @@ class Individual:
         """Set a random location to a random tile. """
         x, y = self._rand_pos()
         t = self._rand_individual(tis)
-        self.data[x][y] = t
+        self.set(x, y, t)
 
     def mutate_improve(self, tis:TIS):
         """A random position's neighbors are made to conform to the neighbor function. """
