@@ -188,16 +188,19 @@ class TIS:
 
 class Individual:
     """
-    Individual for "genetic" tinkering
+    Individual image for tinkering.
+    General datastructure representing images for a number of
+    algorithms.
     """
     def __init__(self, n:int, m:int, tis:TIS):
         self.cols = n
         self.rows = m
-        self.data = np.zeros((n, m), np.int8)
-        self._rand_init(tis)
+        self.data = np.full((self.cols, self.rows), None)
+        self._rand_init()
         self._max = tis.n
         self._start = deepcopy(self.data)
         self._change_history = []
+        self.nids = tis.nids
 
     def to_gif(self, tis:TIS, fname:str):
         frames = [tis.to_image(self._start)]
@@ -210,12 +213,13 @@ class Individual:
 			optimize = False)
 
     def set(self, x, y, t):
-        assert(x < self.cols and y < self.rows and t < self._max)
-        self.data[x][y] = t 
-        self._change_history.append((x, y, t))
+        # assert(x < self.cols and y < self.rows and t < self._max)
+        if x < self.cols and y < self.rows and t < self._max:
+            self.data[x][y] = t 
+            self._change_history.append((x, y, t))
 
 
-    def conformity(self, x:int, y:int, tis:TIS, t:int|None=None) -> int:
+    def conformity(self, x:int, y:int, t:int|None=None) -> int:
         """
         Compute the conformity of at (x, y),
         optionally define t
@@ -224,34 +228,37 @@ class Individual:
         if t is None:
             t = self.data[x][y]
         for nid, i, j in self._neighbors(x, y):
-            if self.data[i][j] in tis.nids(t, nid):
+            if self.data[i][j] in self.nids(t, nid):
                 score += 1
         return score
-    def conform(self, x:int, y:int, tis:TIS):
+
+    def conform(self, x:int, y:int):
         """(x, y)'s neighborbood is made to conform with it w.r.t. tis. """
         t = self.data[x][y]
+        values = {}
         for (nid, i, j) in self._neighbors(x, y):
-            nids = tis.nids(t, nid) 
+            nids = self.nids(t, nid) 
             if t not in nids and nids:
                 self.set(i, j, choice(nids))
+                values[nid] = choice(nids)
 
-    def fitness(self, tis:TIS) -> int:
+    def fitness(self) -> int:
         """Compute the fitness, aka the sum of each tiles conformity. """
         score = 0
         for x, y in self._positions():
-            score += self.conformity(x, y, tis)
+            score += self.conformity(x, y)
         return score
 
-    def mutate(self, tis:TIS):
+    def mutate(self):
         """Set a random location to a random tile. """
         x, y = self._rand_pos()
-        t = self._rand_individual(tis)
+        t = self._rand_individual()
         self.set(x, y, t)
 
-    def mutate_improve(self, tis:TIS):
+    def mutate_improve(self):
         """A random position's neighbors are made to conform to the neighbor function. """
         x, y = self._rand_pos()
-        self.conform(x, y, tis)
+        self.conform(x, y)
 
 
     def _positions(self):
@@ -269,26 +276,28 @@ class Individual:
         """Return a random position. """
         return randint(0, self.cols - 1), randint(0, self.rows - 1)
     
-    def min_conform(self, tis:TIS) -> tuple[int, int] | None:
+    def min_conform(self) -> tuple[int, int] | None:
         """Return the position with minimum conformity or None. """
         c = None
-        i, j = None, None
+        i, j = -1, -1
         for x, y in self._positions():
-            v = self.conformity(x, y, tis)
+            v = self.conformity(x, y)
+            if v == 0:
+                return x, y
             if v < 4 and (c is None or v < c):
                 c = v
                 i, j = x, y
         if c is not None: 
-            return (i, j)
+            return i, j
 
-    def _rand_individual(self, tis:TIS) -> int:
+    def _rand_individual(self) -> int:
         """Return a random valid individual. """
-        return randint(0, tis.n - 1)
+        return randint(0, self._max - 1)
 
-    def _rand_init(self, tis:TIS):
+    def _rand_init(self):
         """Set each position to a random valid value. """
         for x, y in self._positions():
-            self.data[x][y] = self._rand_individual(tis)
+            self.data[x][y] = self._rand_individual()
 
     def _max_score(self) -> int:
         """Return the maximum conformity score, aka each tile is fully accepted. """
