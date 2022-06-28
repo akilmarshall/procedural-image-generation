@@ -219,10 +219,9 @@ class Individual:
             self._change_history.append((x, y, t))
 
 
-    def conformity(self, x:int, y:int, t:int|None=None) -> int:
+    def simple_conformity(self, x:int, y:int, t:int|None=None) -> int:
         """
-        Compute the conformity of at (x, y),
-        optionally define t
+        for a defined position or hypothetical query compute conformity
         """
         score = 0
         if t is None:
@@ -231,6 +230,13 @@ class Individual:
             if self.data[i][j] in self.nids(t, nid):
                 score += 1
         return score
+
+    def conformity(self, x:int, y:int) -> int | None:
+        """
+        Compute the extended conformity at (x, y)
+        """
+        if t := self.data[x][y]:
+            return self.simple_conformity(x, y, t)
 
     def conform(self, x:int, y:int):
         """(x, y)'s neighborbood is made to conform with it w.r.t. tis. """
