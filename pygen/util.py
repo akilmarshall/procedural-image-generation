@@ -9,7 +9,6 @@ from copy import deepcopy
 from PIL import Image, ImageDraw
 import numpy as np
 from tqdm import tqdm
-from functools import reduce
 
 
 class TIS:
@@ -187,6 +186,19 @@ class TIS:
                 img.paste(self.tiles[t], box=(h, k))
 
         return img
+"""
+hashable representations for vector and matrix fragments
+"""
+def V(a:int|None, b:int|None, d:int):
+    """2 element vector, orientation described by d. """
+    return a, b, d
+def M(a:int|None, b:int|None, c:int|None, d:int|None):
+    """
+    2x2 square matrix,
+    a b
+    c d
+    """
+    return a, b, c, d
 
 class Individual:
     """
@@ -194,15 +206,29 @@ class Individual:
     General datastructure representing images for a number of
     algorithms.
     """
-    def __init__(self, n:int, m:int, tis:TIS):
-        self.cols = n
-        self.rows = m
+    def __init__(self, cols:int, rows:int, tis:TIS, rand=False):
+        self.cols = cols
+        self.rows = rows
         self.data = np.full((self.cols, self.rows), None)
-        self._rand_init()
-        self._max = tis.n
+        self.n = tis.n
+        self.nids = tis.nids
+
+        self.reset(rand)
+
+
+    def reset(self, rand=False):
         self._start = deepcopy(self.data)
         self._change_history = []
-        self.nids = tis.nids
+        if rand:
+            self._rand_init()
+
+    def seed(self, x:int, y:int, t:None|int=None):
+        """Seed the image at (x, y) with t (otherwise uniform rand). """
+        if t is None:
+            t = randint(0, self.n - 1)
+            self.data[x % self.cols][y % self.rows] = t
+        else:
+            self.data[x % self.cols][y % self.rows] = t
 
     def to_gif(self, tis:TIS, fname:str):
         frames = [tis.to_image(self._start)]
@@ -215,8 +241,8 @@ class Individual:
 			optimize = False)
 
     def set(self, x, y, t):
-        # assert(x < self.cols and y < self.rows and t < self._max)
-        if x < self.cols and y < self.rows and t < self._max:
+        # assert(x < self.cols and y < self.rows and t < self.n)
+        if x < self.cols and y < self.rows:
             self.data[x][y] = t 
             self._change_history.append((x, y, t))
 
@@ -329,10 +355,112 @@ class Individual:
             #         s += 1
             # return s
 
+    def rule_match_candidates(self):
+        """
+        yields vectors from the image that could satisfy a rule,
+        of the form (a, None) or (None, b)
+        """
+        for v in self._rule_match_candidate_V():
+            if (v[1][0] is None) ^ (v[1][1] is None):
+                yield v
+
+    def rule_query(self, x:int, y:int):
+        if x + 1 < self.cols - 1:
+            a = self.data[x][y]
+            b = self.data[x + 1][y]
+            yield V(a, b, 0)
+        if x - 1 >= 0:
+            a = self.data[x][y]
+            b = self.data[x - 1][y]
+            yield V(a, b, 2)
+        if y + 1 < self.rows - 1:
+            a = self.data[x][y]
+            b = self.data[x][y + 1]
+            yield V(a, b, 1)
+        if y - 1 >= 0:
+            a = self.data[x][y]
+            b = self.data[x][y - 1]
+            yield V(a, b, 3)
+
+    def empty(self) -> bool:
+        for x, y in self._positions():
+            if self.data[x][y] is None:
+                return False
+        return True
+
+    def _rule_match_candidate_V(self):
+        for x, y in self._positions():
+            if x + 1 < self.cols - 1:
+                a = self.data[x][y]
+                b = self.data[x + 1][y]
+                yield (x, y), V(a, b, 0)
+            if x - 1 >= 0:
+                a = self.data[x][y]
+                b = self.data[x - 1][y]
+                yield (x, y), V(a, b, 2)
+            if y + 1 < self.rows - 1:
+                a = self.data[x][y]
+                b = self.data[x][y + 1]
+                yield (x, y), V(a, b, 1)
+            if y - 1 >= 0:
+                a = self.data[x][y]
+                b = self.data[x][y - 1]
+                yield (x, y), V(a, b, 3)
+
+    def _rule_match_candidate_M(self):
+        for x, y in self._positions():
+            i = self.data[x][y]
+            # upper right
+            # a u
+            # i b
+            if x + 1 < self.cols and y - 1 >= 0:
+                a = self.data[x][y - 1]
+                b = self.data[x + 1][y]
+                u = self.data[x + 1][y - 1]
+                yield (x, y), M(a, u, i, b)
+            # upper left
+            # u a
+            # b i
+            if x - 1 >= 0 and y - 1 >= 0:
+                a = self.data[x][y - 1]
+                b = self.data[x - 1][y]
+                u = self.data[x - 1][y - 1]
+            # bottom right
+            # i a
+            # b u
+            if x + 1 < self.cols - 1 and y + 1 < self.rows - 1:
+                a = self.data[x + 1][y]
+                b = self.data[x][y + 1]
+                u = self.data[x + 1][y + 1]
+                yield (x, y), M(i, a, b, u)
+            # bottom left
+            # a i
+            # u b
+            if x - 1 >= 0 and y + 1 < self.rows - 1:
+                a = self.data[x - 1][y]
+                b = self.data[x][y + 1]
+                u = self.data[x - 1][y + 1]
+                yield (x, y), M(a, i, u, b)
 
     def _positions(self):
         """Return an iterator over all positions. """
         return product(range(self.cols), range(self.rows))
+
+    def _empty_positions(self):
+        """Return an iterator over all empty positions. """
+        for x, y in self._positions():
+            if self.data[x][y] is None:
+                yield x, y
+
+    def _empty_neighbors(self, x:int, y:int):
+        for _, i, j in self._neighbors(x, y):
+            if self.data[i][j] is None:
+                yield i, j
+
+    def _defined_neighbors(self, x:int, y:int):
+        for _, i, j in self._neighbors(x, y):
+            if self.data[i][j] is not None:
+                yield i, j
 
     def _neighbors(self, x, y):
         """Return an iterator of the neighbors of (x, y) on a torus. """
@@ -347,7 +475,7 @@ class Individual:
     
     def _rand_individual(self) -> int:
         """Return a random valid individual. """
-        return randint(0, self._max - 1)
+        return randint(0, self.n - 1)
 
     def _rand_init(self):
         """Set each position to a random valid value. """
