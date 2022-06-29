@@ -9,6 +9,7 @@ from copy import deepcopy
 from PIL import Image, ImageDraw
 import numpy as np
 from tqdm import tqdm
+from functools import reduce
 
 
 class TIS:
@@ -293,14 +294,40 @@ class Individual:
         for t, i, j in self._neighbors(x, y):
             yield i, j, (t + 2) % 4
 
-    def potential(self, x:int, y:int):
+    def potential(self, x:int, y:int, most=True):
         """Return a set of points, the best possible choices. """
-        t = self.data[x % self.cols][y % self.rows]
-        if t is None:
-            pass
-        else:
-            pass
+        # t = self.data[x][y]
+        # if t is None:
+        #     H = list(self.H(x, y))
+        #     match len(H):
+        #         case 0: return []
+        #         case 1: return H[0]
+        #         case n: 
+        #             U = list(reduce(lambda a, b: set(a).intersection(set(b)), H))
+        #             if len(U) > 0:
+        #                 return U 
+        #             vs = []
+        #             for i, _ in enumerate(H):
+        #                 J = list(set(H[:i]).intersection(  set(H[i:] )))
+        #                 if len(J) > 0:
+        #                     vs.append((i, J, len(J)))
 
+        #             if len(vs) > 0:
+        #                 vs.sort(key=lambda a:a[2], reverse=most)
+        #                 return vs[0]
+        #             J = []
+        #             for h in H:
+        #                 J.append((len(h), h))
+        #             J.sort(key=lambda a:a[0], reverse=most)
+        #             return J[0]
+        # else:
+        #     pass
+            # s = 0
+            # for d, i, j in self._neighbors(x, y):
+            #     nid = self.data[i][j]
+            #     if nid in self.nids(t,d):
+            #         s += 1
+            # return s
 
 
     def _positions(self):
