@@ -90,6 +90,7 @@ class TIS:
             for i in range(n):
                 if i**2 >= n:
                     return (i, i)
+            return (n, 1)
 
         if dim is None:
             x, y = nice_dimensions(len(self.tiles))
@@ -252,7 +253,8 @@ class Individual:
         """Compute the fitness, aka the sum of each tiles conformity. """
         score = 0
         for x, y in self._positions():
-            score += self.conformity(x, y)
+            if v := self.conformity(x, y):
+                score += v 
         return score
 
     def mutate(self):
@@ -265,6 +267,40 @@ class Individual:
         """A random position's neighbors are made to conform to the neighbor function. """
         x, y = self._rand_pos()
         self.conform(x, y)
+
+    def min_conform(self) -> tuple[int, int] | None:
+        """Return the position with minimum conformity or None. """
+        c = None
+        i, j = -1, -1
+        for x, y in self._positions():
+            if v := self.conformity(x, y):
+                if v == 0:
+                    return x, y
+                if v < 4 and (c is None or v < c):
+                    c = v
+                    i, j = x, y
+        if c is not None: 
+            return i, j
+
+    def undefined(self):
+        """return each point (x, y) that is undefined in the image (self.data). """
+        for x, y in self._positions():
+            if self.data[x][y] is None:
+                yield x, y
+
+    def H(self, x:int, y:int):
+        """H function, return the adjacent tiles to (x, y) and return an iterable of (i, j, id). """
+        for t, i, j in self._neighbors(x, y):
+            yield i, j, (t + 2) % 4
+
+    def potential(self, x:int, y:int):
+        """Return a set of points, the best possible choices. """
+        t = self.data[x % self.cols][y % self.rows]
+        if t is None:
+            pass
+        else:
+            pass
+
 
 
     def _positions(self):
@@ -282,20 +318,6 @@ class Individual:
         """Return a random position. """
         return randint(0, self.cols - 1), randint(0, self.rows - 1)
     
-    def min_conform(self) -> tuple[int, int] | None:
-        """Return the position with minimum conformity or None. """
-        c = None
-        i, j = -1, -1
-        for x, y in self._positions():
-            v = self.conformity(x, y)
-            if v == 0:
-                return x, y
-            if v < 4 and (c is None or v < c):
-                c = v
-                i, j = x, y
-        if c is not None: 
-            return i, j
-
     def _rand_individual(self) -> int:
         """Return a random valid individual. """
         return randint(0, self._max - 1)
