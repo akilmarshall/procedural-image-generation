@@ -5,6 +5,9 @@ from collections import defaultdict
 import numpy as np
 from random import choice, shuffle
 from itertools import product
+from shutil import rmtree
+from os import mkdir
+from os.path import exists
 
 
 def to_array(x:tuple):
@@ -136,7 +139,8 @@ class Image:
         Modify the image by pasting a sub image on to it, change is logged
         in self._history when log=True.
         """
-        self._history.append((x, y, img))
+        if log:
+            self._history.append((x, y, img))
         self.data[x:x + img.shape[0], y:y + img.shape[1]] = img
 
     def region_query(self, x:int, y:int, shape:tuple[int, int]):
@@ -159,9 +163,16 @@ class Image:
     def to_gif(self, fname:str):
         """Create a gif from the change history and initial state. """
         frames = []
-        for img in self._replay():
-            frames.append(img.to_image())
+        for img in self._frames():
+            frames.append(img)
         frames[0].save(fname, save_all=True, append_images=frames[1:])
+
+    def dump_frames(self, path='frame_dump'):
+        if exists(path):
+            rmtree(path)
+        mkdir(path)
+        for i, img in enumerate(self._frames()):
+            img.save(f'{path}/{i}.png')
 
 
     def _replay(self):
@@ -170,6 +181,10 @@ class Image:
         for x, y, d in self._history:
             img.paste(x, y, d, False)
             yield img
+
+    def _frames(self):
+        for i in self._replay():
+            yield i.to_image()
             
     def _positions(self):
         for x,y in product(range(self.cols),range(self.rows)):
@@ -272,10 +287,14 @@ def BW() -> Algorithm:
 def WBWW() -> Algorithm:
     a = Algorithm()
     a.add_rule("WB", "WW")
-    # a.add_rule("B", "W")
     return a
 
-def WBBWAW() -> Algorithm:
+def maze() -> Algorithm:
     a = Algorithm()
-    a.add_rule("WBB", "WRW")
+    a.add_rule("WBB", "WAW")
+    return a
+
+def self_avoid_walk() -> Algorithm:
+    a = Algorithm()
+    a.add_rule("RBB", "WWR")
     return a
