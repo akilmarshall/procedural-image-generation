@@ -3,7 +3,7 @@ from PIL import Image as I
 from .util import Individual, TIS, V
 from collections import defaultdict
 import numpy as np
-from random import choice
+from random import choice, shuffle
 from itertools import product
 
 
@@ -143,10 +143,11 @@ class Image:
         return self.data[x:x + shape[0], y:y + shape[1]]
 
     def all_region(self, shape:tuple[int, int]):
-        w, h = shape
-        for i in range(self.cols - w):
-            for j in range(self.rows - h):
-                yield self.region_query(i, j, shape), (i, j)
+        available = [_ for _ in product(range(self.cols), range(self.rows))]
+        for x, y in available:
+            r = self.region_query(x, y, shape)
+            if r.shape == shape:
+                yield r, (x, y)
 
     def to_image(self):
         img = I.new("RGBA", (self.w * self.cols, self.h * self.rows), color=0)
@@ -182,41 +183,32 @@ class Algorithm:
     """
     A Markov Algorithm
     """
-    def __init__(self, ordered=True):
-        self.ordered = ordered
+    def __init__(self):
+        self.rules = []
 
-        self.setup()
-
-    def setup(self):
-        if self.ordered:
-            self.rules = []
-        else:
-            self.rules = defaultdict(list)
 
     def add_rule(self, key:str, val:str):
         if len(key) == len(val):
-            if self.ordered:
-                self.rules.append((key,val))
-            else:
-                self.rules[key].append(val)
+            self.rules.append((key,val))
 
-    def ordered_rule_match(self, img:Image):
-        """
-        Identify the first rule that matches
-        """
-        for i, (a,_) in enumerate(self.rules):
-            for x, _ in img.all_region(a.shape):
-                if x.shape == a.shape and np.all(x == a):
-                    # rule match
-                    return i 
+    def get_rule_image(self, rule:str):
+        """Given a rule return it's image. """
+        for (a, b) in self.rules:
+            if a == rule:
+                return b 
 
-    def unordered_rule_match(self, img:Image):
-        matches = []
-        for key in self.rules.keys():
-            for x, _ in img.all_region(key.shape):
-                if x.shape == key.shape and np.all(x == key):
-                    matches.append(key)
-        return matches
+    def rule_match(self, img:Image) -> tuple[np.ndarray, np.ndarray] | None:
+        """
+        Identify the first rule that matches and return the pair
+        (l, r) where l is embedded rule match and r is it's image.
+        """
+        for a, _ in self.rules:
+            orientations = list(enumerate_rule_pair(a, self.get_rule_image(a)))
+            shuffle(orientations)
+            for l, r in orientations:
+                for x, _ in img.all_region(l.shape):
+                    if np.all(x == l):
+                        return l, r
 
     def match_locations(self, rule:np.ndarray, img:Image):
         """
@@ -224,27 +216,41 @@ class Algorithm:
         in img that it matches. 
         """
         for r, (x, y) in img.all_region(rule.shape):
-            if np.all(r == rule):
-                yield (x, y)
+            try:
+                if np.all(r == rule):
+                    yield (x, y)
+            except:
+                import pdb
+                pdb.set_trace()
 
-    def __call__(self, img:Image) -> bool:
+    def step(self, img:Image) -> bool:
         """
-        Maybe an interface to "apply" the algorithm to a "word" i.e. an image
+        One step of the algo.
         """
-        if self.ordered:
-            if (i := self.ordered_rule_match(img)) is not None:
-                a, b = self.rules[i]
-                x, y = choice(list(self.match_locations(a, img)))
-                img.paste(x, y, b)
-                return True
-        else:
-            print('implement unordered application')
+        # find the first matching rule
+        if (rule := self.rule_match(img)) is not None:
+            l, r = rule
+            # enumerate it's locations
+            locations = list(self.match_locations(l, img))
+            if len(locations) > 0:
+                x, y = choice(locations)
+                region = img.region_query(x, y, l.shape)
+                if np.all(l == region):
+                    img.paste(x, y, r)
+                    return True
         return False
+
+    def run(self, img):
+        while self.step(img):
+            """Hi mom. """
+
+    def __call__(self, img:Image):
+        self.run(img)
 
 
 def enumerate_rule(rule:str):
     """
-    Given the string repr of a rule, return it's 4 real instances.
+    Given the string repr of a rule, return it's 4 topological embeddings.
     The embedded string representing D4
     """
     a = np.array([[s for s in rule]])
@@ -253,16 +259,23 @@ def enumerate_rule(rule:str):
     yield a.transpose()
     yield np.flip(a.transpose())
 
+def enumerate_rule_pair(a:str, b:str):
+    assert(len(a) == len(b))
+    for l, r in zip(enumerate_rule(a), enumerate_rule(b)):
+        yield l, r
+
 def BW() -> Algorithm:
     a = Algorithm()
-    a.add_rule(np.full((1, 1), "B"), np.full((1, 1), "W"))
+    a.add_rule("B", "W")
     return a
 
 def WBWW() -> Algorithm:
     a = Algorithm()
-    a.add_rule(np.array([["W", "B"]]), np.array([["W", "W"]]))
-    a.add_rule(np.array([["B", "W"]]), np.array([["W", "W"]]))
-    a.add_rule(np.array([["W"], ["B"]]), np.array([["W"], ["W"]]))
-    a.add_rule(np.array([["B"], ["W"]]), np.array([["W"], ["W"]]))
-    a.add_rule(np.full((1, 1), "B"), np.full((1, 1), "W"))
+    a.add_rule("WB", "WW")
+    # a.add_rule("B", "W")
+    return a
+
+def WBBWAW() -> Algorithm:
+    a = Algorithm()
+    a.add_rule("WBB", "WRW")
     return a
