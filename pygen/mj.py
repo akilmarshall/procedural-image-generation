@@ -255,12 +255,19 @@ class Algorithm:
                     return True
         return False
 
-    def run(self, img):
-        while self.step(img):
-            """Hi mom. """
+    def run(self, img, loop:int):
+        """ loop = 0, until terminal, else apply n times. """
 
-    def __call__(self, img:Image):
-        self.run(img)
+        if loop == 0:
+            while self.step(img):
+                """Hi mom. """
+        elif loop > 0:
+            for _ in range(loop):
+                self.step(img)
+
+    def __call__(self, img:Image, loop=0):
+        """ loop = 0, until terminal, else apply n times. """
+        self.run(img, loop)
 
 
 def enumerate_rule(rule:str):
@@ -297,4 +304,10 @@ def maze() -> Algorithm:
 def self_avoid_walk() -> Algorithm:
     a = Algorithm()
     a.add_rule("RBB", "WWR")
+    return a
+
+def erase_walk() -> Algorithm:
+    a = Algorithm()
+    a.add_rule("RB", "WR")
+    a.add_rule("RW", "WR")
     return a
