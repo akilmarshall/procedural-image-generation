@@ -134,6 +134,13 @@ class Image:
         self._init = np.full((self.cols, self.rows), fill)
         self._history = []
 
+    def seed(self, x:int, y:int, s:str):
+        assert(0<= x < self.cols)
+        assert(0<= y < self.rows)
+        assert(s in self.pallet)
+
+        self.paste(x, y, np.full((1, 1), s), False)
+
     def paste(self, x:int, y:int, img:np.ndarray, log=True):
         """
         Modify the image by pasting a sub image on to it, change is logged
@@ -310,4 +317,13 @@ def erase_walk() -> Algorithm:
     a = Algorithm()
     a.add_rule("RB", "WR")
     a.add_rule("RW", "WR")
+    return a
+
+def loop_erase_walk() -> Algorithm:
+    a = Algorithm()
+    a.add_rule("RBB", "WWR")
+    a.add_rule("RBW", "GWY")
+    a.add_rule("YWG", "YBU")
+    a.add_rule("UWW", "BBU")
+    a.add_rule("UWY", "BBR")
     return a
