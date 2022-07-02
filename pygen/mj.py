@@ -327,3 +327,9 @@ def loop_erase_walk() -> Algorithm:
     a.add_rule("UWW", "BBU")
     a.add_rule("UWY", "BBR")
     return a
+
+def river() -> Algorithm:
+    a = Algorithm()
+    a.add_rule("B", "W")
+    a.add_rule("B", "R")
+    return a
