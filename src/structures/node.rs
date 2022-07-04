@@ -64,23 +64,23 @@ impl Node {
     }
     /// Returns the position with the fewest options to choose from, i.e. for each tile in
     /// self.data for each that is Tile::These(v), return the first position with the smallest
-    /// v.len() otherwise None.
+    /// v.len() otherwise None. The returned position will always be Tile::These(_)
     pub fn min_choices(&self) -> Option<(usize, usize)> {
         let mut out: Option<(usize, usize)> = None;
         let mut min: Option<usize> = None;
-        for (i, d) in self.data().iter().enumerate() {
-            let x: usize = i % self.cols();
-            let y: usize = i / self.cols();
-            if let Tile::These(neighbors) = d {
-                match min {
-                    None => {
-                        min = Some(neighbors.len());
-                        out = Some((x, y));
-                    }
-                    Some(m) => {
-                        if neighbors.len() < m {
+        for x in 0..self.cols() {
+            for y in 0..self.rows() {
+                if let Tile::These(neighbors) = self.at(x, y) {
+                    match min {
+                        None => {
                             min = Some(neighbors.len());
                             out = Some((x, y));
+                        }
+                        Some(m) => {
+                            if neighbors.len() < m {
+                                min = Some(neighbors.len());
+                                out = Some((x, y));
+                            }
                         }
                     }
                 }
@@ -88,13 +88,26 @@ impl Node {
         }
         out
     }
-    /// Set (x, y) to t and propogate the consequences according to the neighbor function.
+    /// Attempt to set (x, y) to t and propogate the consequences according to the neighbor function.
     pub fn collapse(&mut self, x: usize, y: usize, t: usize, tid: &TID) {
-        self.set(x, y, Tile::This(Some(t)));
-        for (d, h, k) in self.neighbors(x, y) {
-            if let Tile::These(neighbors) = self.at(h, k) {
-                let ts = intersection(neighbors.to_vec(), tid.neighborhood(t, d));
-                self.set(h, k, ts);
+        match self.at(x, y) {
+            Tile::This(Some(_)) | Tile::This(None) => { // already collapsed
+            }
+            Tile::These(tiles) => {
+                if tiles.contains(&t) {
+                    self.set(x, y, Tile::This(Some(t)));
+                    for (d, h, k) in self.neighbors(x, y) {
+                        if let Tile::These(wave) = self.at(h, k) {
+                            let mut new_wave = Vec::new();
+                            for n in tid.neighborhood(t, d) {
+                                if wave.contains(&n) {
+                                    new_wave.push(n);
+                                }
+                            }
+                            self.set(h, k, Tile::These(new_wave));
+                        }
+                    }
+                }
             }
         }
     }

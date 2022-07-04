@@ -13,20 +13,16 @@ pub fn search(seed: Node, tis: TID) -> Vec<IDMatrix> {
     while !active.is_empty() {
         if let Some(img) = active.pop_front() {
             if let Some((x, y)) = img.min_choices() {
-                match img.at(x, y) {
-                    Tile::This(Some(id)) => {}
-                    Tile::This(None) => {}
-                    Tile::These(tiles) => {
-                        for t in tiles {
-                            let mut fork = img.clone();
-                            fork.collapse(x, y, t, &tis);
-                            if fork.complete() {
-                                if fork.good() {
-                                    out.push(fork.to_idmatrix())
-                                }
-                            } else {
-                                active.push_front(fork);
+                if let Tile::These(tiles) = img.at(x, y) {
+                    for t in tiles {
+                        let mut fork = img.clone();
+                        fork.collapse(x, y, t, &tis);
+                        if fork.complete() {
+                            if fork.good() {
+                                out.push(fork.to_idmatrix())
                             }
+                        } else {
+                            active.push_front(fork);
                         }
                     }
                 }
