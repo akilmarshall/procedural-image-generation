@@ -29,6 +29,26 @@ It's [neighbor functions](https://github.com/akilmarshall/procedural-image-gener
 <img src=https://imgur.com/GQAaMIr.png/>
 </p>
 
+### Constrained Backtracking Search
+
+(this example uses [this](https://imgur.com/uFuMFEU.png) image as input)
+
+Also known as [Wave Function Collapse](https://github.com/mxgmn/WaveFunctionCollapse) (tiled model)
+
+When tasked with completed a fully uncollapsed image this algorithm's run time and output is enormous. It is often more interesting to provide it
+with a "seeded" image:
+
+<p align="center">
+<img src=https://imgur.com/3JFRd9e.png/>
+</p>
+<p align = "center">5x5 seed image</p>
+
+<p align="center">
+<img src=https://i.imgur.com/WEzHzLh.gif/>
+</p>
+<p align = "center">Generated images</p>
+
+
 ### [Fragment](https://github.com/akilmarshall/procedural-image-generation/wiki/Procedures#fragment)
 
 For this incredibly minimal input image each algorithm produced only 10 outputs
