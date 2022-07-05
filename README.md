@@ -40,14 +40,48 @@ with a "seeded" image:
 
 <p align="center">
 <img src=https://imgur.com/3JFRd9e.png/>
-</p>
-<p align = "center">5x5 seed image</p>
-
-<p align="center">
+-->
 <img src=https://i.imgur.com/WEzHzLh.gif/>
 </p>
-<p align = "center">Generated images</p>
+<p align = "center">5x5 fix (1, 1) with the door tile</p>
 
+This door tile only appears once in the original image thus a large portion of the image space is constrained, however an enormous amount of variety is still observed in the outputs.
+
+<p align="center">
+<img src=https://imgur.com/Ow7uHy0.png/>
+-->
+<img src=https://imgur.com/vZ4Mdo9.gif/>
+</p>
+<p align = "center">5x5 fix several bike paths</p>
+
+I was curious to see what would happen with the bike paths. In this example their generation is more constrained then I expected but this may not hold up to further testing.
+
+<p align="center">
+<img src=https://imgur.com/L7LUl8O.png/>
+-->
+<img src=https://imgur.com/oPeLdEJ.gif/>
+</p>
+<p align = "center">5x5 fix (1, 1) with a mud slide tile</p>
+
+I wanted to see what kind of areas could be placed around the mud slide. I expected that the path in and out would be fairly constrained and the left and right allowed to vary wildly, it was in fact the opposite.
+
+<p align="center">
+<img src=https://imgur.com/hPRPo53.png/>
+-->
+<img src=https://imgur.com/6fZAtow.gif/>
+</p>
+<p align = "center">4x4 fix corner lake tiles</p>
+
+I wanted to see what the algorithm was able to come up with given minimal input and I am quite pleased with the output.
+
+<p align="center">
+<img src=https://imgur.com/wImRKv5.png/>
+-->
+<img src=https://imgur.com/rvpEqSP.gif/>
+</p>
+<p align = "center">14x5 fix several corner roof tiles</p>
+
+I wanted to test building a larger image leaning on the algorithm to fill in large areas.  Initially I believed that sucessively building an image and feeding larger and larger inputs would be the work flow, however this only increasese the search space over "every" (read many) variation which is theoritically comforting but practically useless. Edge exapnding and filling in small areas with fixed sections feels like the correct way to use this tool.
 
 ### [Fragment](https://github.com/akilmarshall/procedural-image-generation/wiki/Procedures#fragment)
 
