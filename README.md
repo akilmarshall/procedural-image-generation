@@ -8,28 +8,7 @@ How can I turn a single image into more images that are somewhat like it?
 - implement neighbor function visual dump [rust]
 - write code to make animated gifs from MCI algorithms
 
-## Examples
-
-Using the following image as input 
-
-<p align="center">
-<img src=https://imgur.com/ZuOinkm.png/>
-</p>
-<p align = "center">minimal input example</p>
-
-Made up of the following [tileset](https://github.com/akilmarshall/procedural-image-generation/wiki/Theory)
-
-<p align="center">
-<img src=https://imgur.com/CfTFzSk.png/>
-</p>
-
-It's [neighbor functions](https://github.com/akilmarshall/procedural-image-generation/wiki/Theory#neighbor-function) are visualized below
-
-<p align="center">
-<img src=https://imgur.com/GQAaMIr.png/>
-</p>
-
-### Constrained Backtracking Search
+## Constrained Backtracking Search
 
 (this example uses [this](https://imgur.com/uFuMFEU.png) image as input)
 
@@ -82,6 +61,29 @@ I wanted to see what the algorithm was able to come up with given minimal input 
 <p align = "center">14x5 fix several corner roof tiles</p>
 
 I wanted to test building a larger image leaning on the algorithm to fill in large areas.  Initially I believed that sucessively building an image and feeding larger and larger inputs would be the work flow, however this only increasese the search space over "every" (read many) variation which is theoritically comforting but practically useless. Edge exapnding and filling in small areas with fixed sections feels like the correct way to use this tool.
+
+
+## Examples
+
+Using the following image as input 
+
+<p align="center">
+<img src=https://imgur.com/ZuOinkm.png/>
+</p>
+<p align = "center">minimal input example</p>
+
+Made up of the following [tileset](https://github.com/akilmarshall/procedural-image-generation/wiki/Theory)
+
+<p align="center">
+<img src=https://imgur.com/CfTFzSk.png/>
+</p>
+
+It's [neighbor functions](https://github.com/akilmarshall/procedural-image-generation/wiki/Theory#neighbor-function) are visualized below
+
+<p align="center">
+<img src=https://imgur.com/GQAaMIr.png/>
+</p>
+
 
 ### [Fragment](https://github.com/akilmarshall/procedural-image-generation/wiki/Procedures#fragment)
 
