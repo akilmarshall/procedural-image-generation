@@ -43,7 +43,7 @@ with a "seeded" image:
 -->
 <img src=https://i.imgur.com/WEzHzLh.gif/>
 </p>
-<p align = "center">5x5 fix (1, 1) with the door tile</p>
+<p align = "center">5x5 fix (3, 3) with the door tile</p>
 
 This door tile only appears once in the original image thus a large portion of the image space is constrained, however an enormous amount of variety is still observed in the outputs.
 
@@ -61,7 +61,7 @@ I was curious to see what would happen with the bike paths. In this example thei
 -->
 <img src=https://imgur.com/oPeLdEJ.gif/>
 </p>
-<p align = "center">5x5 fix (1, 1) with a mud slide tile</p>
+<p align = "center">5x5 fix (3, 3) with a mud slide tile</p>
 
 I wanted to see what kind of areas could be placed around the mud slide. I expected that the path in and out would be fairly constrained and the left and right allowed to vary wildly, it was in fact the opposite.
 
