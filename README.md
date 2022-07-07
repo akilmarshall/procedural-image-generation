@@ -14,7 +14,7 @@ How can I turn a single image into more images that are somewhat like it?
 
 Also known as [Wave Function Collapse](https://github.com/mxgmn/WaveFunctionCollapse) (tiled model)
 
-When tasked with completed a fully uncollapsed image this algorithm's run time and output is enormous. It is often more interesting to provide it
+When tasked with completing a blank image this algorithm's run time and output is enormous (2x2 and sometimges 3x3 can be computable). It is often more interesting to provide it
 with a "seeded" image:
 
 <p align="center">
